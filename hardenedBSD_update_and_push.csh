@@ -2,7 +2,7 @@
 
 set OPWD=`pwd`
 set SOURCE_DIR="/usr/data/source/git/opBSD"
-set BRANCHES=`cat /usr/data/source/git/opBSD/hardenedBSD_branches.txt`
+set BRANCHES=`cat $SOURCE_DIR/hardenedBSD_branches.txt`
 set SOURCE="$SOURCE_DIR/hardenedBSD.git"
 set LOGS="$SOURCE_DIR/logs/hardenedBSD"
 set DATE=`date "+%Y%m%d%H%M%S"`
