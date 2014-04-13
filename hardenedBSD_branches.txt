@@ -2,5 +2,4 @@ stable/10:freebsd/stable/10
 hardened/10/aslr:freebsd/stable/10
 hardened/10/paxctl:freebsd/stable/10
 master:freebsd/master
-hardened/current/aslr:freebsd/master
 hardened/current/paxctl:freebsd/master
