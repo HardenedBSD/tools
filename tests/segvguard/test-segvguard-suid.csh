@@ -6,8 +6,10 @@
 #
 
 set TEST_NAME = "test-segvguard-suid"
+set TEST_DIR = "/tmp/pax-tests/${USER}/segvguard/"
 
-cd /tmp
+test -d ${TEST_DIR} || mkdir -p ${TEST_DIR}
+cd ${TEST_DIR}
 
 cat > ${TEST_NAME}.c<<__EOF
 #include <stdio.h>
@@ -27,6 +29,8 @@ make ${TEST_NAME}
 
 set a = 0
 set a_max = `sysctl -n security.pax.segvguard.max_crashes`
+# the last must failed
+@ a_max = $a_max + 1
 while ($a < $a_max)
 	./${TEST_NAME}
 	@ a = $a + 1

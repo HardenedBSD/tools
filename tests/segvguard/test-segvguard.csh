@@ -1,8 +1,10 @@
 #!/bin/csh
 
 set TEST_NAME = "test-segvguard"
+set TEST_DIR = "/tmp/pax-tests/${USER}/segvguard/"
 
-cd /tmp
+test -d ${TEST_DIR} || mkdir -p ${TEST_DIR}
+cd ${TEST_DIR}
 
 cat > ${TEST_NAME}.c<<__EOF
 #include <stdio.h>
