@@ -19,8 +19,11 @@ git merge freebsd/master
 
 git diff freebsd/stable/10 hardened/10/aslr > /tmp/${DATE}-freebsd-stable-10-aslr-segvguard-SNAPSHOT.diff
 git diff freebsd/master hardened/current/aslr > /tmp/${DATE}-freebsd-current-aslr-segvguard-SNAPSHOT.diff
+git tag ${DATE}-freebsd-stable-10-aslr-segvguard-SNAPSHOT `git rev-list hardened/10/aslr -1`
+git tag ${DATE}-freebsd-current-aslr-segvguard-SNAPSHOT `git rev-list hardened/current/aslr -1`
 
 git push origin hardened/current/aslr
+git push --tags
 
 git checkout ${OHEAD}
 git stash pop
