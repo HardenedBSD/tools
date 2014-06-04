@@ -14,8 +14,13 @@ git stash
 ${SOURCE_DIR}/tools.git/hardenedBSD_update_and_push.csh
 git fetch freebsd
 git checkout hardened/current/aslr
+
+setenv GIT_MERGE_AUTOEDIT no
+
 git merge origin/hardened/current/aslr
 git merge freebsd/master
+
+unsetenv GIT_MERGE_AUTOEDIT
 
 git diff freebsd/stable/10 hardened/10/aslr > /tmp/${DATE}-freebsd-stable-10-aslr-segvguard-SNAPSHOT.diff
 git diff freebsd/master hardened/current/aslr > /tmp/${DATE}-freebsd-current-aslr-segvguard-SNAPSHOT.diff
