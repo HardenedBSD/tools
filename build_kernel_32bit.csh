@@ -8,7 +8,7 @@ setenv DESTDIR /tmp/kernelbuild
 set current_dir = `pwd`
 set _current_dir = `echo ${current_dir} | sed -e 's|\(.*/\)\(.*\.git\)\(/.*\)*|\2|g'`
 set _current_realdir = `echo ${current_dir} | sed -e 's|\(.*/\)\(.*\.git\)\(/.*\)*|\1/\2|g'`
-set _check_toolchain = "${MAKEOBJDIRPREFIX}/${TARGET}.${TARGET_ARCH}/${_current_realdir}/tmp/usr/include/clang"
+set _check_toolchain = "${MAKEOBJDIRPREFIX}/___kernel-toolchain_DONE"
 set _date=`date "+%Y%m%d%H%M%S"`
 
 if ( "`sysctl -n security.bsd.hardlink_check_uid`" == "1" ) then
@@ -36,8 +36,9 @@ if ( ! -d $MAKEOBJDIRPREFIX ) then
 	mkdir $MAKEOBJDIRPREFIX
 endif
 
-if ( ! -d ${_check_toolchain} ) then
-	(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC kernel-toolchain) |& tee /tmp/cc-log-${_current_dir}-${_date}
+if ( ! -f ${_check_toolchain} ) then
+	(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC kernel-toolchain) |& tee /tmp/cc-log-${_current_dir}-${_date} || exit
+	touch ${_check_toolchain}
 else
 	echo "skip make kernel-toolchain"
 	sleep 1
