@@ -2,7 +2,7 @@
 
 setenv TARGET i386
 setenv TARGET_ARCH i386
-setenv MAKEOBJDIRPREFIX /tmp/objdir
+setenv MAKEOBJDIRPREFIX "/tmp/objdir_${TARGET}"
 setenv DESTDIR /tmp/kernelbuild
 @ __freebsd_mk_jobs = `sysctl -n kern.smp.cpus` + 1
 set current_dir = `pwd`
