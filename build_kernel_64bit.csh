@@ -5,6 +5,8 @@ setenv DESTDIR /tmp/kernelbuild
 @ __freebsd_mk_jobs = `sysctl -n kern.smp.cpus` + 1
 set current_dir = `pwd`
 set _current_dir = `echo ${current_dir} | sed -e 's|\(.*/\)\(.*\.git\)\(/.*\)*|\2|g'`
+set _current_realdir = `echo ${current_dir} | sed -e 's|\(.*/\)\(.*\.git\)\(/.*\)*|\1/\2|g'`
+set _check_toolchain = "${MAKEOBJDIRPREFIX}/${_current_realdir}/tmp/usr/include/clang"
 set _date=`date "+%Y%m%d%H%M%S"`
 
 if ( "`sysctl -n security.bsd.hardlink_check_uid`" == "1" ) then
@@ -28,7 +30,14 @@ endif
 echo "build source dir: ${_current_dir}"
 sleep 1
 
-test -d $MAKEOBJDIRPREFIX || mkdir $MAKEOBJDIRPREFIX
+if ( ! -d $MAKEOBJDIRPREFIX ) then
+	mkdir $MAKEOBJDIRPREFIX
+endif
 
-(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC kernel-toolchain) |& tee /tmp/cc-log-${_current_dir}-${_date}
+if ( ! -d ${_check_toolchain} ) then
+	(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC kernel-toolchain) |& tee /tmp/cc-log-${_current_dir}-${_date}
+else
+	echo "skip make kernel-toolchain"
+	sleep 1
+endif
 (cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC buildkernel) |& tee -a /tmp/cc-log-${_current_dir}-${_date}
