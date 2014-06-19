@@ -2,14 +2,15 @@
 
 setenv TARGET i386
 setenv TARGET_ARCH i386
-setenv MAKEOBJDIRPREFIX "/tmp/objdir_${TARGET}"
-setenv DESTDIR /tmp/kernelbuild
+setenv MAKEOBJDIRPREFIX "/tmp/${TARGET}-objdir"
+setenv DESTDIR /tmp/${TARGET}-kernel
 @ __freebsd_mk_jobs = `sysctl -n kern.smp.cpus` + 1
 set current_dir = `pwd`
 set _current_dir = `echo ${current_dir} | sed -e 's|\(.*/\)\(.*\.git\)\(/.*\)*|\2|g'`
 set _current_realdir = `echo ${current_dir} | sed -e 's|\(.*/\)\(.*\.git\)\(/.*\)*|\1/\2|g'`
 set _check_toolchain = "${MAKEOBJDIRPREFIX}/___kernel-toolchain_DONE"
 set _date=`date "+%Y%m%d%H%M%S"`
+set _log="/tmp/${TARGET}-cc-log-${_current_dir}-${_date}"
 
 if ( "`sysctl -n security.bsd.hardlink_check_uid`" == "1" ) then
 	echo "build will fail, due to hard security checks"
@@ -37,10 +38,10 @@ if ( ! -d $MAKEOBJDIRPREFIX ) then
 endif
 
 if ( ! -f ${_check_toolchain} ) then
-	(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC kernel-toolchain) |& tee /tmp/cc-log-${_current_dir}-${_date} || exit
+	(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC kernel-toolchain) |& tee ${_log} || exit
 	touch ${_check_toolchain}
 else
 	echo "skip make kernel-toolchain"
 	sleep 1
 endif
-(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC buildkernel) |& tee -a /tmp/cc-log-${_current_dir}-${_date}
+(cd /usr/data/source/git/opBSD/${_current_dir}; make -j$__freebsd_mk_jobs -DNO_ROOT KERNCONF=GENERIC kernel) |& tee -a ${_log}
