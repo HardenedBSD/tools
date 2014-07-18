@@ -2,6 +2,7 @@
 
 setenv TARGET amd64
 setenv MAKEOBJDIRPREFIX /tmp/${TARGET}-objdir
+setenv __MAKE_CONF /dev/null
 setenv DESTDIR /tmp/${TARGET}-kernel
 @ __freebsd_mk_jobs = `sysctl -n kern.smp.cpus` + 1
 set current_dir = `pwd`

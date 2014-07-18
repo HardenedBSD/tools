@@ -2,6 +2,7 @@
 
 setenv TARGET i386
 setenv TARGET_ARCH i386
+setenv __MAKE_CONF /dev/null
 setenv MAKEOBJDIRPREFIX "/tmp/${TARGET}-objdir"
 setenv DESTDIR /tmp/${TARGET}-kernel
 @ __freebsd_mk_jobs = `sysctl -n kern.smp.cpus` + 1
