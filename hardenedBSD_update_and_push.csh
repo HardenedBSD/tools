@@ -4,11 +4,20 @@ set OPWD=`pwd`
 set SOURCE_DIR="/usr/data/source/git/opBSD"
 set BRANCHES=`cat $SOURCE_DIR/hardenedBSD_branches.txt`
 set SOURCE="$SOURCE_DIR/hardenedBSD.git"
-set LOGS="$SOURCE_DIR/logs/hardenedBSD"
+set LOGS="$HOME/log/hardenedBSD"
 set DATE=`date "+%Y%m%d%H%M%S"`
 set TEE_CMD="tee -a"
+set LOCK="${SOURCE_DIR}/hardenedbsd-repo-lock"
+set DST_MAIL="op@hardenedbsd.org"
 
 test -d $LOGS || mkdir -p $LOGS
+
+if ( -e ${LOCK} ) then
+	echo "update error at ${DATE} - lock exists" | mail -s "hbsd - lock error" ${DST_MAIL}
+	exit 1
+endif
+
+touch ${LOCK}
 
 cd ${SOURCE}
 
@@ -39,3 +48,5 @@ foreach branch ( ${BRANCHES} )
 end
 
 cd $OPWD
+
+unlink ${LOCK}
