@@ -8,12 +8,16 @@ set LOGS="$HOME/log/hardenedBSD"
 set DATE=`date "+%Y%m%d%H%M%S"`
 set TEE_CMD="tee -a"
 set LOCK="${SOURCE_DIR}/hardenedbsd-repo-lock"
-set DST_MAIL="op@hardenedbsd.org"
+set DST_MAIL="robot@hardenedbsd.org"
+set ENABLE_MAIL="YES"
 
 test -d $LOGS || mkdir -p $LOGS
 
 if ( -e ${LOCK} ) then
-	echo "update error at ${DATE} - lock exists" | mail -s "hbsd - lock error" ${DST_MAIL}
+	echo "update error at ${DATE} - lock exists"
+	if ( ${ENABLE_MAIL} == "YES" ) then
+		echo "update error at ${DATE} - lock exists" | mail -s "hbsd - lock error" ${DST_MAIL}
+	endif
 	exit 1
 endif
 
@@ -45,6 +49,9 @@ foreach branch ( ${BRANCHES} )
 	set branch=`echo ${branch} | cut -d ':' -f 1`
 	set _branch=`echo ${branch} | tr '/' ':'`
 	(git push origin ${branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	if ( ${ENABLE_MAIL} == "YES" ) then
+		cat ${LOGS}/${_branch}-${DATE}.log | mail -s ${_branch}-${DATE}.log ${DST_MAIL}
+	endif
 end
 
 cd $OPWD
