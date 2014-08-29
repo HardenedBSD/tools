@@ -49,8 +49,14 @@ foreach branch ( ${BRANCHES} )
 	set branch=`echo ${branch} | cut -d ':' -f 1`
 	set _branch=`echo ${branch} | tr '/' ':'`
 	(git push origin ${branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	if ( $? != 0 ) then
+		set _mail_subject_prefix="[FAILED]"
+	else
+		set _mail_subject_prefix="[OK]"
+	endif
 	if ( ${ENABLE_MAIL} == "YES" ) then
-		cat ${LOGS}/${_branch}-${DATE}.log | mail -s ${_branch}-${DATE}.log ${DST_MAIL}
+		cat ${LOGS}/${_branch}-${DATE}.log | \
+		    mail -s "${_mail_subject_prefix} ${_branch}-${DATE}.log" ${DST_MAIL}
 	endif
 end
 
