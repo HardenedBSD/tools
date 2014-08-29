@@ -24,3 +24,4 @@ git branch --track {,origin/}hardened/current/intel-smap
 git branch --track {,origin/}hardened/current/paxctl
 git branch --track {,origin/}hardened/current/segvguard
 git branch --track {,origin/}hardened/current/upstream
+git branch --track {,origin/}hardened/current/unstable
