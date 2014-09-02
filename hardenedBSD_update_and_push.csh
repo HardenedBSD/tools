@@ -43,8 +43,19 @@ foreach branch ( ${BRANCHES} )
 	set branch=`echo ${branch} | cut -d ':' -f 1`
 	set _branch=`echo ${branch} | tr '/' ':'`
 
-	# merge specific branches to current branch
+	echo "==== BEGIN: ${branch} ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+
+	echo "current branch: ${branch}" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	echo "mergeable branch: ${remote_branches}" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+
 	(git checkout ${branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	# pull in latest changes from main repo
+	(git pull) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	if ( $? != 0 ) then
+		echo "ERROR: git pull failed, try to recover" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		( git reset --hard ) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	endif
+	# merge specific branches to current branch
 	(git merge ${branch} ${remote_branches}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	if ( $? != 0 ) then
 		set err=1
@@ -67,6 +78,7 @@ handle_err:
 		set _mail_subject_prefix="[OK]"
 	endif
 
+	echo "==== END: ${branch} ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	if ( ${ENABLE_MAIL} == "YES" ) then
 		cat ${LOGS}/${_branch}-${DATE}.log | \
 		    mail -s "${_mail_subject_prefix} ${_branch}-${DATE}.log" ${DST_MAIL}
