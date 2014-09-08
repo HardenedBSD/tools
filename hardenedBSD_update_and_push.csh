@@ -45,22 +45,33 @@ foreach branch ( ${BRANCHES} )
 	echo "current branch: ${branch}" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	echo "mergeable branch: ${remote_branches}" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 
+	echo "==== change branch ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	# change branch
 	(git checkout ${branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 
+	echo "==== show current branch ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	# show, that branch correctly switched
+	(git branch) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+
+	echo "==== drop stale changes ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	# drop any stale change
 	(git reset --hard HEAD) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 
+	echo "==== update to latest origin ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	# pull in latest changes from main repo
 	(git pull) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	if ( $? != 0 ) then
 		echo "ERROR: git pull failed, try to recover" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		( git reset --hard ) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	endif
+	echo "==== merge branches ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	# merge specific branches to current branch
 	(git merge ${branch} ${remote_branches}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	if ( $? != 0 ) then
 		set err=1
 		set _mail_subject_prefix="[MERGE]"
+		# show what's wrong
+		echo "==== merge failed at ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		(git diff) |& head -500 | ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		goto handle_err
 	endif
@@ -76,6 +87,8 @@ foreach branch ( ${BRANCHES} )
 handle_err:
 	if ( ${err} != 0 ) then
 		set _mail_subject_prefix="[FAILED]${_mail_subject_prefix}"
+		# create a clean state, if failed something
+		echo "==== merge failed and clean up after ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		(git status) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		(git reset --hard) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		(git clean -fd) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
