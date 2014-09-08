@@ -36,9 +36,6 @@ foreach branch ( ${BRANCHES} )
 	set err=0
 	set _mail_subject_prefix=""
 
-	# drop any stale change
-	git reset --hard
-
 	set remote_branches=`echo ${branch} | cut -d ':' -f 2 | tr '+' ' '`
 	set branch=`echo ${branch} | cut -d ':' -f 1`
 	set _branch=`echo ${branch} | tr '/' ':'`
@@ -49,6 +46,10 @@ foreach branch ( ${BRANCHES} )
 	echo "mergeable branch: ${remote_branches}" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 
 	(git checkout ${branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+
+	# drop any stale change
+	(git reset --hard HEAD) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+
 	# pull in latest changes from main repo
 	(git pull) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	if ( $? != 0 ) then
@@ -75,6 +76,9 @@ foreach branch ( ${BRANCHES} )
 handle_err:
 	if ( ${err} != 0 ) then
 		set _mail_subject_prefix="[FAILED]${_mail_subject_prefix}"
+		(git status) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		(git reset --hard) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		(git clean -fd) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	else
 		set _mail_subject_prefix="[OK]"
 	endif
