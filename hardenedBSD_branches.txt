@@ -9,4 +9,4 @@ hardened/current/aslr:freebsd/master
 hardened/current/hardening:freebsd/master
 hardened/current/segvguard:freebsd/master
 hardened/current/ptrace:freebsd/master
-hardened/current/unstable:hardened/current/master+hardened/current/hardening+hardened/current/paxctl+hardened/current/segvguard
+hardened/current/unstable:hardened/current/master+hardened/current/hardening+hardened/current/paxctl+hardened/current/segvguard+hardened/current/ptrace
