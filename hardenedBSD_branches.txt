@@ -1,4 +1,5 @@
 master:freebsd/master
+hardened/current/master:freebsd/master
 stable/10:freebsd/stable/10
 hardened/10/aslr:freebsd/stable/10
 hardened/10/paxctl:freebsd/stable/10
@@ -9,4 +10,3 @@ hardened/current/hardening:freebsd/master
 hardened/current/segvguard:freebsd/master
 hardened/current/ptrace:freebsd/master
 hardened/current/unstable:hardened/current/master+hardened/current/hardening+hardened/current/paxctl+hardened/current/segvguard
-hardened/current/master:freebsd/master
