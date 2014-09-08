@@ -60,6 +60,7 @@ foreach branch ( ${BRANCHES} )
 	if ( $? != 0 ) then
 		set err=1
 		set _mail_subject_prefix="[MERGE]"
+		(git diff) |& head -500 | ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		goto handle_err
 	endif
 
@@ -68,7 +69,6 @@ foreach branch ( ${BRANCHES} )
 	if ( $? != 0 ) then
 		set _mail_subject_prefix="[PUSH]"
 		set err=1
-		(git diff) |& head -500 | ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		goto handle_err
 	endif
 
