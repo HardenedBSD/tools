@@ -65,14 +65,22 @@ foreach branch ( ${BRANCHES} )
 		( git reset --hard ) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	endif
 	echo "==== merge branches ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
-	# merge specific branches to current branch
-	(git merge ${branch} ${remote_branches}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
-	if ( $? != 0 ) then
-		set err=1
-		set _mail_subject_prefix="[MERGE]"
-		# show what's wrong
-		echo "==== merge failed at ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
-		(git diff) |& head -500 | ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	foreach _remote_branch ( ${remote_branches} )
+		# merge specific branches to current branch
+		(git merge ${branch} ${_remote_branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		if ( $? != 0 ) then
+			set err=1
+			set _mail_subject_prefix="[MERGE]"
+			# show what's wrong
+			echo "==== merge failed at ${_remote_branch} branch ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+			(git diff) |& head -500 | ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+			(git status) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+			(git reset --hard) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+			(git clean -fd) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		endif
+	end
+
+	if ( ${err} != 0 ) then
 		goto handle_err
 	endif
 
