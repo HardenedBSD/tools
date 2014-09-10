@@ -26,3 +26,4 @@ git branch --track {,origin/}hardened/current/segvguard
 git branch --track {,origin/}hardened/current/upstream
 git branch --track {,origin/}hardened/current/unstable
 git branch --track {,origin/}hardened/current/ptrace
+git branch --track {,origin/}hardened/current/log
