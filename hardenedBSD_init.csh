@@ -28,3 +28,4 @@ git branch --track {,origin/}hardened/current/unstable
 git branch --track {,origin/}hardened/current/ptrace
 git branch --track {,origin/}hardened/current/log
 git branch --track {,origin/}hardened/current/userlandenhanced
+git branch --track {,origin/}hardened/current/chacha
