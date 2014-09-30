@@ -1,9 +1,9 @@
-master:origin/freebsd/master
-hardened/current/master:origin/freebsd/master
-stable/10:origin/freebsd/stable/10
-hardened/10/aslr:origin/freebsd/stable/10
-hardened/10/paxctl:origin/freebsd/stable/10
-hardened/current/intel-smap:origin/freebsd/master
+master:freebsd/master
+hardened/current/master:freebsd/master
+stable/10:freebsd/stable/10
+hardened/10/aslr:freebsd/stable/10
+hardened/10/paxctl:freebsd/stable/10
+hardened/current/intel-smap:freebsd/master
 hardened/current/paxctl:origin/hardened/current/master
 hardened/current/aslr:origin/hardened/current/master
 hardened/current/hardening:origin/hardened/current/master
