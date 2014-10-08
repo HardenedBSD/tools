@@ -47,13 +47,13 @@ foreach i ( ${ORIGIN_BASED} )
 	set _mail_subject_prefix="[STAT]"
 	set _branch=`echo $i | tr '/' ':'`
 
-	echo "git cherry -v origin/hardened/current/master ${i}" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
+	echo "git cherry -v origin/hardened/current/master ${i}" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}.log
 	echo "===" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
-	git cherry -v ${BASE_BRANCH} origin/${i} | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
+	git cherry -v ${BASE_BRANCH} origin/${i} | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}.log
 	echo
 
 	if ( ${ENABLE_MAIL} == "YES" ) then
-		cat ${LOGS}/${_branch}-${DATE}.log | \
+		cat ${LOGS}/stat-${_branch}-${DATE}.log | \
 		    mail -s "${_mail_subject_prefix} stat-${_branch}-${DATE}.log" ${DST_MAIL}
 	endif
 end
