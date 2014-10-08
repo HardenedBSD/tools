@@ -8,10 +8,20 @@ set DATE=`date "+%Y%m%d%H%M%S"`
 set TEE_CMD="tee -a"
 set LOCK="${SOURCE_DIR}/hardenedbsd-repo-lock"
 set DST_MAIL="robot@hardenedbsd.org"
-set ENABLE_MAIL="NO"
+set ENABLE_MAIL="YES"
 
 set BASE_BRANCH="origin/hardened/current/master"
-set ORIGIN_BASED="hardened/current/aslr hardened/current/hardening hardened/current/intel-smap hardened/current/paxctl hardened/current/segvguard hardened/current/upstream hardened/current/unstable hardened/current/chacha"
+set ORIGIN_BASED="hardened/current/aslr"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/hardening"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/intel-smap"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/paxctl"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/segvguard"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/upstream"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/chacha"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/log"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/ptrace"
+set ORIGING_BASED="${ORIGING_BASED} hardenedbsd_commits_not_in_hardened"
+set ORIGING_BASED="${ORIGING_BASED} hardened/current/unstable"
 set FREEBSD_BASED=""
 
 
