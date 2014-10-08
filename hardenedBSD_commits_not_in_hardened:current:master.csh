@@ -20,7 +20,7 @@ set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/upstream"
 set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/chacha"
 set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/log"
 set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/ptrace"
-set ORIGIN_BASED="${ORIGIN_BASED} hardenedbsd_commits_not_in_hardened"
+set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/userlandenhanced"
 set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/unstable"
 set FREEBSD_BASED=""
 
