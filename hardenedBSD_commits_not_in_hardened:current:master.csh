@@ -3,7 +3,7 @@
 set OPWD=`pwd`
 set SOURCE_DIR="/usr/data/source/git/opBSD"
 set GIT_REPO=${SOURCE_DIR}"/hardenedBSD.git"
-set LOGS="$HOME/test/log/hardenedBSD"
+set LOGS="$HOME/log/hardenedBSD"
 set DATE=`date "+%Y%m%d%H%M%S"`
 set TEE_CMD="tee -a"
 set LOCK="${SOURCE_DIR}/hardenedbsd-repo-lock"
@@ -44,10 +44,11 @@ cd ${GIT_REPO}
 echo "HardenedBSD based"
 echo "branches: ${ORIGIN_BASED}"
 foreach i ( ${ORIGIN_BASED} )
-	set _mail_subject_prefix="[STAT] git cherry -v origin/hardened/current/master ${i}"
+	set _mail_subject_prefix="[STAT]"
 	set _branch=`echo $i | tr '/' ':'`
 
-	echo "${_mail_subject_prefix}" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
+	echo "git cherry -v origin/hardened/current/master ${i}" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
+	echo "===" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
 	git cherry -v ${BASE_BRANCH} origin/${i} | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
 	echo
 
