@@ -1,0 +1,52 @@
+#!/bin/csh
+
+set OPWD=`pwd`
+set SOURCE_DIR="/usr/data/source/git/opBSD"
+set GIT_REPO=${SOURCE_DIR}"/hardenedBSD.git"
+set LOGS="$HOME/test/log/hardenedBSD"
+set DATE=`date "+%Y%m%d%H%M%S"`
+set TEE_CMD="tee -a"
+set LOCK="${SOURCE_DIR}/hardenedbsd-repo-lock"
+set DST_MAIL="robot@hardenedbsd.org"
+set ENABLE_MAIL="NO"
+
+set BASE_BRANCH="origin/hardened/current/master"
+set ORIGIN_BASED="hardened/current/aslr hardened/current/hardening hardened/current/intel-smap hardened/current/paxctl hardened/current/segvguard hardened/current/upstream hardened/current/unstable hardened/current/chacha"
+set FREEBSD_BASED=""
+
+
+test -d $LOGS || mkdir -p $LOGS
+
+if ( -e ${LOCK} ) then
+	echo "update error at ${DATE} - lock exists"
+	if ( ${ENABLE_MAIL} == "YES" ) then
+		echo "update error at ${DATE} - lock exists" | mail -s "hbsd - lock error" ${DST_MAIL}
+	endif
+	exit 1
+endif
+
+touch ${LOCK}
+
+cd ${GIT_REPO}
+
+#git fetch origin
+
+echo "HardenedBSD based"
+echo "branches: ${ORIGIN_BASED}"
+foreach i ( ${ORIGIN_BASED} )
+	set _mail_subject_prefix="[STAT] git cherry -v origin/hardened/current/master ${i}"
+	set _branch=`echo $i | tr '/' ':'`
+
+	echo "${_mail_subject_prefix}" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
+	git cherry -v ${BASE_BRANCH} origin/${i} | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
+	echo
+
+	if ( ${ENABLE_MAIL} == "YES" ) then
+		cat ${LOGS}/${_branch}-${DATE}.log | \
+		    mail -s "${_mail_subject_prefix} stat-${_branch}-${DATE}.log" ${DST_MAIL}
+	endif
+end
+
+cd $OPWD
+
+unlink ${LOCK}
