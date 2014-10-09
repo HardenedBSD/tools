@@ -22,6 +22,7 @@ set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/log"
 set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/ptrace"
 set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/userlandenhanced"
 set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/unstable"
+set ORIGIN_BASED="${ORIGIN_BASED} hardened/current/pie"
 set FREEBSD_BASED=""
 
 
