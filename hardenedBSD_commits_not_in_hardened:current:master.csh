@@ -49,7 +49,7 @@ foreach i ( ${ORIGIN_BASED} )
 	set _branch=`echo $i | tr '/' ':'`
 
 	echo "git cherry -v origin/hardened/current/master ${i}" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}.log
-	echo "===" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}
+	echo "===" | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}.log
 	git cherry -v ${BASE_BRANCH} origin/${i} | ${TEE_CMD} ${LOGS}/stat-${_branch}-${DATE}.log
 	echo
 
