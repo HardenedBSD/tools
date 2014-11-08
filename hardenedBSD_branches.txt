@@ -13,4 +13,5 @@ hardened/current/log:origin/hardened/current/master
 hardened/current/userlandenhanced:origin/hardened/current/master
 hardened/current/chacha:origin/hardened/current/master
 hardened/current/pie:origin/hardened/current/master
-hardened/current/unstable:origin/hardened/current/master+origin/hardened/current/hardening+origin/hardened/current/paxctl+origin/hardened/current/segvguard+origin/hardened/current/ptrace+origin/hardened/current/log+origin/hardened/current/userlandenhanced+origin/hardened/current/pie+origin/hardened/current/chacha
+hardened/current/aout:origin/hardened/current/master
+hardened/current/unstable:origin/hardened/current/master+origin/hardened/current/hardening+origin/hardened/current/paxctl+origin/hardened/current/segvguard+origin/hardened/current/ptrace+origin/hardened/current/log+origin/hardened/current/userlandenhanced+origin/hardened/current/pie+origin/hardened/current/chacha+origin/hardened/current/aout
