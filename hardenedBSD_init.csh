@@ -15,12 +15,10 @@ git branch --track {,origin/}hardened/current/master
 
 # HardenedBSD 10-STABLE topic branches
 git branch --track {,origin/}hardened/10/aslr
-git branch --track {,origin/}hardened/10/paxctl
 
 # HardenedBSD CURRENT topic branches
 git branch --track {,origin/}hardened/current/aslr
 git branch --track {,origin/}hardened/current/intel-smap
-git branch --track {,origin/}hardened/current/paxctl
 git branch --track {,origin/}hardened/current/segvguard
 git branch --track {,origin/}hardened/current/upstream
 git branch --track {,origin/}hardened/current/unstable

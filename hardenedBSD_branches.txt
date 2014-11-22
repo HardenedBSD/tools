@@ -2,13 +2,11 @@ master:freebsd/master
 hardened/current/master:freebsd/master
 stable/10:freebsd/stable/10
 hardened/10/aslr:freebsd/stable/10
-hardened/10/paxctl:freebsd/stable/10
 hardened/current/intel-smap:freebsd/master
-hardened/current/paxctl:origin/hardened/current/master
 hardened/current/aslr:origin/hardened/current/master
 hardened/current/segvguard:origin/hardened/current/master
 hardened/current/ptrace:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
 hardened/current/userlandenhanced:origin/hardened/current/master
 hardened/current/pie:origin/hardened/current/master
-hardened/current/unstable:origin/hardened/current/master+origin/hardened/current/paxctl+origin/hardened/current/segvguard+origin/hardened/current/ptrace+origin/hardened/current/log+origin/hardened/current/userlandenhanced+origin/hardened/current/pie
+hardened/current/unstable:origin/hardened/current/master+origin/hardened/current/segvguard+origin/hardened/current/ptrace+origin/hardened/current/log+origin/hardened/current/userlandenhanced+origin/hardened/current/pie
