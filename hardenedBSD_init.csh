@@ -1,6 +1,10 @@
 #!/bin/csh
 
 git clone git@github.com:HardenedBSD/hardenedBSD.git hardenedBSD.git
+if ( $? != 0 ) then
+	git clone https://github.com/HardenedBSD/hardenedBSD.git hardenedBSD.git
+endif
+
 cd hardenedBSD.git
 
 git remote add freebsd https://github.com/freebsd/freebsd.git
