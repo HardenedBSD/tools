@@ -30,6 +30,7 @@ set OHEAD=`git branch | awk '/\*/{print $2}'`
 git stash
 
 (git fetch origin) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
+(git fetch freebsd) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
 
 foreach branch ( ${BRANCHES} )
 	set err=0
