@@ -19,7 +19,6 @@ git branch --track {,origin/}hardened/10/paxctl
 
 # HardenedBSD CURRENT topic branches
 git branch --track {,origin/}hardened/current/aslr
-git branch --track {,origin/}hardened/current/hardening
 git branch --track {,origin/}hardened/current/intel-smap
 git branch --track {,origin/}hardened/current/paxctl
 git branch --track {,origin/}hardened/current/segvguard
