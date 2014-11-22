@@ -30,4 +30,3 @@ git branch --track {,origin/}hardened/current/log
 git branch --track {,origin/}hardened/current/userlandenhanced
 git branch --track {,origin/}hardened/current/chacha
 git branch --track {,origin/}hardened/current/pie
-git branch --track {,origin/}hardened/current/aout
