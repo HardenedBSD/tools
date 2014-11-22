@@ -20,9 +20,10 @@ git branch --track {,origin/}hardened/10/aslr
 git branch --track {,origin/}hardened/current/aslr
 git branch --track {,origin/}hardened/current/intel-smap
 git branch --track {,origin/}hardened/current/segvguard
-git branch --track {,origin/}hardened/current/upstream
 git branch --track {,origin/}hardened/current/unstable
 git branch --track {,origin/}hardened/current/ptrace
 git branch --track {,origin/}hardened/current/log
 git branch --track {,origin/}hardened/current/userlandenhanced
 git branch --track {,origin/}hardened/current/pie
+# HardenedBSD CURRENT upsteaming branches
+git branch --track {,origin/}hardened/current/upstreaming/aslr
