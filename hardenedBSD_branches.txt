@@ -7,5 +7,4 @@ hardened/current/aslr:origin/hardened/current/master
 hardened/current/segvguard:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
 hardened/current/userlandenhanced:origin/hardened/current/master
-hardened/current/pie:origin/hardened/current/master
-hardened/current/unstable:origin/hardened/current/master+origin/hardened/current/segvguard+origin/hardened/current/log+origin/hardened/current/userlandenhanced+origin/hardened/current/pie
+hardened/current/unstable:origin/hardened/current/master+origin/hardened/current/segvguard+origin/hardened/current/log+origin/hardened/current/userlandenhanced
