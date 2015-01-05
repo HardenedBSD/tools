@@ -14,7 +14,7 @@ while getopts 't:' o; do
                         targetdir="i386"
                         ;;
                     beaglebone)
-                        target="TARGET=arm TARGET_ARCH=i386"
+                        target="TARGET=arm TARGET_ARCH=armv6"
                         targetdir="beaglebone"
                         kernel="BEAGLEBONE-HARDENEDBSD"
                         ;;

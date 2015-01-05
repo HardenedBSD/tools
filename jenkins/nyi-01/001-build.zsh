@@ -1,13 +1,18 @@
 #!/usr/local/bin/zsh
 
-njobs=32
+njobs=16
 objdir="/jenkins/objdir/${JOB_NAME}"
 
 target=""
 targetdir="amd64"
 kernel="HARDENEDBSD"
 
-while getopts 't:' o; do
+export __MAKE_CONF="/dev/null"
+export __SRC_CONF="/dev/null"
+export MAKE_CONF="/dev/null"
+export SRC_CONF="/dev/null"
+
+while getopts 'j:t:' o; do
     case "${o}" in
         t)
             if [ ! "${OPTARG}" = "${target}" ]; then
@@ -17,7 +22,7 @@ while getopts 't:' o; do
                         targetdir="i386"
                         ;;
                     beaglebone)
-                        target="TARGET=arm TARGET_ARCH=i386"
+                        target="TARGET=arm TARGET_ARCH=armv6"
                         targetdir="beaglebone"
                         kernel="BEAGLEBONE-HARDENEDBSD"
                         ;;
@@ -27,6 +32,9 @@ while getopts 't:' o; do
                         ;;
                 esac
             fi
+            ;;
+        j)
+            jobs=${OPTARG}
             ;;
     esac
 done
