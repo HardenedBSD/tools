@@ -36,8 +36,8 @@ cd release
 sudo make -s clean ${target}
 sudo make -s release KERNCONF=${kernel} NOPORTS=1 ${target}
 
-_TAR_DIR="/jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}"
-_ISO_DIR="/jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}/ISO-IMAGES"
+_TAR_DIR="/jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/"
+_ISO_DIR="${_TAR_DIR}/ISO-IMAGES"
 
 if [ ! -d ${_TAR_DIR} ]; then
     mkdir -p ${_TAR_DIR}
