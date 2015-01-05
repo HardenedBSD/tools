@@ -47,11 +47,14 @@ if [ ! -d ${_ISO_DIR} ]; then
     mkdir -p ${_ISO_DIR}
 fi
 
+_INSTALLER_PREFIX="HardenedBSD-11-CURRENT_hardenedbsd-stable_master-"
+
 # iso and img file - aka installers
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.iso' -o -name '*.img'); do
-    cp ${file} ${_ISO_DIR}
-    sha256 ${file} >> ${_ISO_DIR}/CHECKSUMS.SHA256
-    md5 ${file} >> ${_ISO_DIR}/CHECKSUMS.MD5
+    ln ${file} ${_INSTALLER_PREFIX}${file}
+    cp ${file} ${_ISO_DIR}/${_INSTALLER_PREFIX}${file}
+    sha256 ${_INSTALLER_PREFIX}${file} >> ${_ISO_DIR}/CHECKSUMS.SHA256
+    md5 ${_INSTALLER_PREFIX}${file} >> ${_ISO_DIR}/CHECKSUMS.MD5
 done
 
 # archives - aka part of installers
