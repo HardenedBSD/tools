@@ -64,4 +64,4 @@ for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -n
     md5 ${file} >> ${_TAR_DIR}/CHECKSUMS.MD5
 done
 
-ln -fs ${_TAR_DIR} "/jenkins/releases/${JOB_NAME}-LATEST"
+ln -fhs ${_TAR_DIR} "/jenkins/releases/${JOB_NAME}-LATEST"
