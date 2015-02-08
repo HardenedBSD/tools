@@ -55,6 +55,7 @@ for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -n
     cp ${file} ${_dst_file}
     sha256 ${_dst_file} >> ${_ISO_DIR}/CHECKSUMS.SHA256
     md5 ${_dst_file} >> ${_ISO_DIR}/CHECKSUMS.MD5
+    gpg --sign -a --detach -u 4BB5228E -o ${_ISO_DIR}/$(basename ${_dst_file}).asc ${_dst_file}
 done
 
 # archives - aka part of installers
@@ -62,6 +63,7 @@ for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -n
     cp ${file} ${_TAR_DIR}
     sha256 ${file} >> ${_TAR_DIR}/CHECKSUMS.SHA256
     md5 ${file} >> ${_TAR_DIR}/CHECKSUMS.MD5
+    gpg --sign -a --detach -u 4BB5228E -o ${_TAR_DIR}/$(basename ${file}).asc ${file}
 done
 
 ln -fhs ${_TAR_DIR} "/jenkins/releases/${JOB_NAME}-LATEST"

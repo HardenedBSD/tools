@@ -30,7 +30,7 @@ done
 
 cd release
 sudo make -s clean ${target}
-sudo make -s release KERNCONF=${kernel} NOPORTS=1 ${target}
+sudo make -s real-release KERNCONF=${kernel} NOPORTS=1 ${target}
 
 if [ ! -d /jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir} ]; then
     mkdir -p /jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}
@@ -41,6 +41,8 @@ for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -n
     if [ "${file##*\.}" = "iso" ]; then
         sha256 ${file} >> /jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}/HASHES
     fi
+
+    gpg --sign -a --detach -u 4BB5228E -o /jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}/$(basename ${file}).asc ${file}
 done
 
 rm -f /jenkins/releases/${JOB_NAME}/latest-${targetdir} || true
