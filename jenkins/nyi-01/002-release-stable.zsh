@@ -1,7 +1,7 @@
 #!/usr/local/bin/zsh
 
-target=""
-targetdir="amd64"
+target="SHOULD_FAIL"
+targetdir=""
 kernel="HARDENEDBSD"
 export __MAKE_CONF="/dev/null"
 export __SRC_CONF="/dev/null"
@@ -13,6 +13,10 @@ while getopts 't:' o; do
         t)
             if [ ! "${OPTARG}" = "${target}" ]; then
                 case "${OPTARG}" in
+		    amd64)
+			target="TARGET=amd64 TARGET_ARCH=amd64"
+			targetdir="amd64"
+			;;
                     i386)
                         target="TARGET=i386 TARGET_ARCH=i386"
                         targetdir="i386"

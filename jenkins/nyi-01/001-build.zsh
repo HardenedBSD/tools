@@ -3,8 +3,8 @@
 njobs=16
 objdir="/jenkins/objdir/${JOB_NAME}"
 
-target=""
-targetdir="amd64"
+target="SHOULD_FAIL"
+targetdir=""
 kernel="HARDENEDBSD"
 
 export __MAKE_CONF="/dev/null"
@@ -17,6 +17,10 @@ while getopts 'j:t:' o; do
         t)
             if [ ! "${OPTARG}" = "${target}" ]; then
                 case "${OPTARG}" in
+		    amd64)
+                        target="TARGET=amd64 TARGET_ARCH=amd64"
+                        targetdir="amd64"
+                        ;;
                     i386)
                         target="TARGET=i386 TARGET_ARCH=i386"
                         targetdir="i386"
