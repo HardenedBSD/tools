@@ -47,7 +47,7 @@ if [ ! -d ${_ISO_DIR} ]; then
     mkdir -p ${_ISO_DIR}
 fi
 
-_INSTALLER_PREFIX="HardenedBSD-11-CURRENT_hardenedbsd-stable_master-"
+_INSTALLER_PREFIX="HardenedBSD-11-CURRENT_${JOB_NAME:l}-"
 
 # iso and img file - aka installers
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.iso' -o -name '*.img'); do
