@@ -1,0 +1,4 @@
+build_hbsd_kernel_64bit.csh		:	~user
+build_hbsd_kernel_64bit_dirty.csh	:	~user
+do_update.csh				:	~root
+start.sh				:	/usr/data/vm
