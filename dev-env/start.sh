@@ -21,7 +21,7 @@ fi
 if [ ! -f ${__installer} ]
 then
 	echo "fetch installer"
-	fetch http://jenkins.hardenedbsd.org/builds/HardenedBSD-master-amd64-LATEST/HardenedBSD-11-CURRENT_hardenedbsd-master-amd64-disc1.iso -o ${__installer}
+	fetch 'http://jenkins.hardenedbsd.org/builds/HardenedBSD-master-amd64-LATEST/HardenedBSD-11-CURRENT_hardenedbsd-master-amd64-disc1.iso' -o ${__installer}
 fi
 
 if [ ! -f ${__installed} ]
