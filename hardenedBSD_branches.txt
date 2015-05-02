@@ -1,6 +1,7 @@
 master:freebsd/master
 hardened/current/master:freebsd/master
 stable/10:freebsd/stable/10
+hardened/experimental/10-stable:freebsd/stable/10
 hardened/current/intel-smap:freebsd/master
 hardened/current/aslr:origin/hardened/current/master
 hardened/current/segvguard:origin/hardened/current/master

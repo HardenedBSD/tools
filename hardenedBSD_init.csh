@@ -18,7 +18,7 @@ git branch --track {,freebsd/}stable/10
 git branch --track {,origin/}hardened/current/master
 
 # HardenedBSD 10-STABLE topic branches
-git branch --track {,origin/}hardened/10/aslr
+git branch --track {,origin/}hardened/experimental/10-stable
 
 # HardenedBSD CURRENT topic branches
 git branch --track {,origin/}hardened/current/aslr
