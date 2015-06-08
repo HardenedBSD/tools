@@ -30,6 +30,11 @@ while getopts 'j:t:' o; do
                         targetdir="beaglebone"
                         kernel="BEAGLEBONE-HARDENEDBSD"
                         ;;
+		    opbsd-fortify-amd64)
+			target="TARGET=amd64 TARGET_ARCH=amd64"
+			targetdir="amd64"
+			kernel="GENERIC"
+			;;
                     upstream-amd64)
                         target="TARGET=amd64 TARGET_ARCH=amd64"
                         targetdir="amd64"
