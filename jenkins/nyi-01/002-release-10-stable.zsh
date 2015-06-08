@@ -26,17 +26,10 @@ while getopts 't:' o; do
                         targetdir="beaglebone"
                         kernel="BEAGLEBONE-HARDENEDBSD"
                         ;;
-		    upstream-amd64)
+		upstream-amd64)
 			target="TARGET=amd64 TARGET_ARCH=amd64"
 			targetdir="amd64"
 			kernel="GENERIC"
-			_INSTALLER_PREFIX="FreeBSD-11-CURRENT_${_L_JOB_NAME}-"
-			;;
-		    upstream-aslr-amd64)
-			target="TARGET=amd64 TARGET_ARCH=amd64"
-			targetdir="amd64"
-			kernel="GENERIC"
-			_INSTALLER_PREFIX="FreeBSD-11-CURRENT_${_L_JOB_NAME}-"
 			;;
                     defaut)
                         echo "Invalid target!"
@@ -64,9 +57,7 @@ if [ ! -d ${_ISO_DIR} ]; then
 fi
 
 _L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
-if [ -z ${_INSTALLER_PREFIX} ]; then
-	_INSTALLER_PREFIX="HardenedBSD-11-CURRENT_${_L_JOB_NAME}-"
-fi
+_INSTALLER_PREFIX="HardenedBSD-10-STABLE_${_L_JOB_NAME}-"
 
 # iso and img file - aka installers
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.iso' -o -name '*.img'); do

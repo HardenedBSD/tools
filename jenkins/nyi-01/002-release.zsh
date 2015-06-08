@@ -42,7 +42,7 @@ for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -n
         sha256 ${file} >> /jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}/HASHES
     fi
 
-    gpg --sign -a --detach -u 4BB5228E -o /jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}/$(basename ${file}).asc ${file}
+    gpg --sign -a --detach -u 819B11A26FFD188D -o /jenkins/releases/${JOB_NAME}/${BUILD_NUMBER}/${targetdir}/$(basename ${file}).asc ${file}
 done
 
 rm -f /jenkins/releases/${JOB_NAME}/latest-${targetdir} || true

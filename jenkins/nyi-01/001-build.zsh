@@ -30,6 +30,16 @@ while getopts 'j:t:' o; do
                         targetdir="beaglebone"
                         kernel="BEAGLEBONE-HARDENEDBSD"
                         ;;
+                    upstream-amd64)
+                        target="TARGET=amd64 TARGET_ARCH=amd64"
+                        targetdir="amd64"
+                        kernel="GENERIC"
+                        ;;
+                    upstream-aslr-amd64)
+                        target="TARGET=amd64 TARGET_ARCH=amd64"
+                        targetdir="amd64"
+                        kernel="GENERIC"
+                        ;;
                     defaut)
                         echo "Invalid target!"
                         exit 1
