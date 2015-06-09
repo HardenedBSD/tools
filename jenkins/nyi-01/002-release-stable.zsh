@@ -8,6 +8,8 @@ export __SRC_CONF="/dev/null"
 export MAKE_CONF="/dev/null"
 export SRC_CONF="/dev/null"
 
+_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
+
 while getopts 't:' o; do
     case "${o}" in
         t)
@@ -69,7 +71,6 @@ if [ ! -d ${_ISO_DIR} ]; then
     mkdir -p ${_ISO_DIR}
 fi
 
-_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
 if [ -z ${_INSTALLER_PREFIX} ]; then
 	_INSTALLER_PREFIX="HardenedBSD-11-CURRENT_${_L_JOB_NAME}-"
 fi
