@@ -43,7 +43,7 @@ while getopts 'j:t:' o; do
                     upstream-aslr-amd64)
                         target="TARGET=amd64 TARGET_ARCH=amd64"
                         targetdir="amd64"
-                        kernel="GENERIC"
+                        kernel="GENERIC-ASLR"
                         ;;
                     defaut)
                         echo "Invalid target!"

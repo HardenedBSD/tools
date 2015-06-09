@@ -43,7 +43,7 @@ while getopts 't:' o; do
 		    upstream-aslr-amd64)
 			target="TARGET=amd64 TARGET_ARCH=amd64"
 			targetdir="amd64"
-			kernel="GENERIC"
+			kernel="GENERIC-ASLR"
 			_INSTALLER_PREFIX="FreeBSD-11-CURRENT_${_L_JOB_NAME}-"
 			;;
                     defaut)
