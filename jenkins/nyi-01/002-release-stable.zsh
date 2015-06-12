@@ -57,8 +57,8 @@ while getopts 't:' o; do
 done
 
 cd release
-sudo make -s clean ${target}
-sudo make -s real-release KERNCONF=${kernel} NOPORTS=1 ${target}
+sudo make clean ${target}
+sudo make real-release KERNCONF=${kernel} NOPORTS=1 ${target}
 
 _TAR_DIR="/jenkins/releases/${JOB_NAME}/build-${BUILD_NUMBER}/"
 _ISO_DIR="${_TAR_DIR}/ISO-IMAGES"
@@ -78,7 +78,7 @@ fi
 # iso and img file - aka installers
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.iso' -o -name '*.img'); do
     _dst_file="${_ISO_DIR}/${_INSTALLER_PREFIX}${file##*/}"
-    cp ${file} ${_dst_file}
+    cp -v ${file} ${_dst_file}
     sha256 ${_dst_file} >> ${_ISO_DIR}/CHECKSUMS.SHA256
     md5 ${_dst_file} >> ${_ISO_DIR}/CHECKSUMS.MD5
     gpg --sign -a --detach -u 819B11A26FFD188D -o ${_ISO_DIR}/$(basename ${_dst_file}).asc ${_dst_file}
@@ -86,7 +86,7 @@ done
 
 # archives - aka part of installers
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.txz'); do
-    cp ${file} ${_TAR_DIR}
+    cp -v ${file} ${_TAR_DIR}
     sha256 ${file} >> ${_TAR_DIR}/CHECKSUMS.SHA256
     md5 ${file} >> ${_TAR_DIR}/CHECKSUMS.MD5
     gpg --sign -a --detach -u 819B11A26FFD188D -o ${_TAR_DIR}/$(basename ${file}).asc ${file}
