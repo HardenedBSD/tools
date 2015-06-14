@@ -7,8 +7,6 @@ hardened/current/intel-smap:freebsd/master
 hardened/current/aslr:origin/hardened/current/master
 hardened/current/segvguard:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
-hardened/current/userlandenhanced:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/segvguard
 hardened/current/unstable:origin/hardened/current/log
-hardened/current/unstable:origin/hardened/current/userlandenhanced
