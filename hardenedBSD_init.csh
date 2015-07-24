@@ -13,6 +13,7 @@ git fetch freebsd
 # FreeBSD upstream repos
 git branch --track {,freebsd/}master
 git branch --track {,freebsd/}stable/10
+git branch --track {,freebsd/}releng/10.2
 
 # HardenedBSD master branch
 git branch --track {,origin/}hardened/current/master
@@ -20,12 +21,12 @@ git branch --track {,origin/}hardened/current/master
 # HardenedBSD 10-STABLE topic branches
 git branch --track {,origin/}hardened/10-stable/master
 
+# HardenedBSD 10.2-RELENG topic branches
+git branch --track {,origin/}hardened/10.2-releng/master
+
 # HardenedBSD CURRENT topic branches
 git branch --track {,origin/}hardened/current/aslr
 git branch --track {,origin/}hardened/current/intel-smap
 git branch --track {,origin/}hardened/current/segvguard
 git branch --track {,origin/}hardened/current/unstable
 git branch --track {,origin/}hardened/current/log
-git branch --track {,origin/}hardened/current/pie
-# HardenedBSD CURRENT upsteaming branches
-git branch --track {,origin/}hardened/current/upstreaming/aslr
