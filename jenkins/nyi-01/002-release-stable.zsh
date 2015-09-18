@@ -85,7 +85,7 @@ for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -n
 done
 
 # archives - aka part of installers
-for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.txz'); do
+for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.txz' -or -name 'MANIFEST'); do
     cp -v ${file} ${_TAR_DIR}
     sha256 ${file} >> ${_TAR_DIR}/CHECKSUMS.SHA256
     md5 ${file} >> ${_TAR_DIR}/CHECKSUMS.MD5
