@@ -5,6 +5,14 @@ set _Mtag = ""
 set _mtag = ""
 set _stag = ""
 
+if ($#argv < 2 ) then
+	echo "$0 (10-stable|current) (-M|-m|-s)"
+	echo "	-M	update major version"
+	echo "	-m	update minor version"
+	echo "	-s	update snapshot version"
+	exit 1
+endif
+
 git remote -v
 
 echo
@@ -13,14 +21,6 @@ git fetch origin
 git fetch hardenedbsd
 
 echo
-
-if ($#argv < 2 ) then
-	echo "$0 (10-stable|current) (-M|-m|-s)"
-	echo "	-M	update major version"
-	echo "	-m	update minor version"
-	echo "	-s	update snapshot version"
-	exit 1
-endif
 
 set __branch = ${argv[1]}
 set __update_mode = ${argv[2]}
