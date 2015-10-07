@@ -18,6 +18,19 @@ git remote -v
 echo
 
 git fetch origin
+
+git remote show hardenedbsd
+set _ret = $?
+if ( ${_ret} != 0 ) then
+		echo "WARNING: 'hardenedbsd' remote have not found in your repo, if you want to add them, continue"
+		echo "--"
+		echo 'enter "yes" to continue'
+		set _ok = $<
+		if ( $_ok != "yes" ) then
+			exit 1
+		endif
+	git remote add hardenedbsd git@github.com:HardenedBSD/hardenedBSD.git
+endif
 git fetch hardenedbsd
 
 echo
