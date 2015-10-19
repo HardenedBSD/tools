@@ -27,7 +27,7 @@ if ( ! -d ${SOURCE} ) then
 	mkdir -p ${SOURCE_DIR}
 	cd ${SOURCE_DIR}
 	git clone 'git@github.com:HardenedBSD/hardenedbsd-ports.git' hardenedbsd-ports.git
-	cd ${SOURCE_DIR}
+	cd ${SOURCE}
 	git remote add freebsd 'https://github.com/freebsd/freebsd-ports.git'
 endif
 
