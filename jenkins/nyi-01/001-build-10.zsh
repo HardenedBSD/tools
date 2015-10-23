@@ -48,5 +48,9 @@ while getopts 'j:t:' o; do
     esac
 done
 
-sudo make -j${njobs} buildworld ${target}
-sudo make -j${njobs} buildkernel KERNCONF=${kernel} ${target}
+
+sudo -u root -g wheel make clean cleandir
+sudo -u root -g wheel make -C release clean cleandir
+
+sudo -u root -g wheel make -j${njobs} buildworld ${target}
+sudo -u root -g wheel make -j${njobs} buildkernel KERNCONF=${kernel} ${target}
