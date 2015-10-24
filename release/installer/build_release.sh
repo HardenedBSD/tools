@@ -18,6 +18,8 @@ BRANCH_10="hardened/10-stable/master"
 BRANCH_current="hardened/current/master"
 
 LOG_DIR="/usr/data/source/logs"
+LOG_FILE="${LOG_DIR}/${DATE}.log"
+LOG_FILE_SHORT="${LOG_DIR}/${DATE}.slog"
 SOURCES_DIR="/usr/data/source/git/opBSD"
 LOCK_DIR="${SOURCES_DIR}"
 LOCK_FILE="${LOCK_DIR}/hardenedbsd-stable-repo-lock"
@@ -28,6 +30,28 @@ HARDENEDBSD_TOOLS_DIR="${SOURCES_DIR}/tools.git"
 HARDENEDBSD_TOOLS_REPO="${SOURCES_REPO}/tools.git"
 RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/HardenedBSD-stable-autodetect-git-release.conf"
 
+log()
+{
+	echo "$*" | tee -a ${LOG_FILE_SHORT}
+}
+
+info()
+{
+	log "INFO: $*"
+}
+
+warn()
+{
+
+	log "WARNING: $*"
+}
+
+err()
+{
+	log "ERROR: $*"
+	exit 1
+}
+
 if [ "X${1}" != "XTRACKED" ]
 then
 	if [ ! -d ${LOG_DIR} ]
@@ -35,19 +59,17 @@ then
 		mkdir -p ${LOG_DIR}
 		if [ $? != 0 ]
 		then
-			echo "wtf?!?"
-			exit 1
+			err "missing log dir"
 		fi
 	fi
 
 	if [ -f ${LOCK_FILE} ]
 	then
-		echo "${DATE}: lock exists ..."
-		exit 1
+		err "lock file exists"
 	fi
 
 	touch ${LOCK_FILE}
-	script ${LOG_DIR}/${DATE}.log ${0} TRACKED ${DATE} ${*}
+	script ${LOG_FILE} ${0} TRACKED ${DATE} ${*}
 	unlink ${LOCK_FILE}
 else
 	DATE=${2}
@@ -72,7 +94,7 @@ check_or_create_repo()
 
 	if [ ! -d ${_dir} ]
 	then
-		echo "create missing ${_dir}"
+		info "create missing ${_dir}"
 
 		mkdir -p ${_parent_dir}
 		cd ${_parent_dir}
@@ -80,8 +102,7 @@ check_or_create_repo()
 
 		if [ ! -d ${_dir} ]
 		then
-			echo "failed to create or missing ${_dir} directory"
-			exit 1
+			err "failed to create or missing ${_dir} directory"
 		fi
 	fi
 }
@@ -99,6 +120,8 @@ prepare_branch()
 
 	cd ${HARDENEDBSD_STABLE_DIR}
 
+	info "prepare ${_branch} branch"
+
 	git reset --hard
 	git clean -fd
 
@@ -112,19 +135,27 @@ build_release()
 
 	if [ ! -d release ]
 	then
-		echo "wtf?!"
-		exit 2
+		err "missing release dir"
 	fi
 
 	cd release
 
 	if [ ! -f release.sh ]
 	then
-		echo "wtf!?"
-		exit 3
+		err "missing release.sh"
 	fi
 
 	sh -x ./release.sh -c ${RELEASE_CONF}
+	ret=$?
+
+	if [ $ret = 0 ]
+	then
+		info "build done"
+	else
+		info "build failed"
+	fi
+
+	return ${ret}
 }
 
 publish_release()
@@ -147,6 +178,9 @@ git fetch origin
 
 new_revision_10=`get_revision origin/${BRANCH_10}`
 new_revision_current=`get_revision origin/${BRANCH_current}`
+
+info "10-STABLE revisions: old ${old_revision_10} new ${new_revision_10}"
+info "11-CURRENT revisions: old ${old_revision_current} new ${new_revision_current}"
 
 if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_mode}" = "Xyes" ]
 then
