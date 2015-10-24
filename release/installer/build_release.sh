@@ -102,8 +102,8 @@ prepare_branch()
 	git reset --hard
 	git clean -fd
 
-	git checkout ${_branch}
-	git checkout -f origin/${_branch}
+	git checkout -f ${_branch}
+	git reset --hard origin/${_branch}
 }
 
 build_release()
