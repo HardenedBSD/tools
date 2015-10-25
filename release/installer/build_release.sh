@@ -18,7 +18,8 @@ BRANCH_10="hardened/10-stable/master"
 BRANCH_current="hardened/current/master"
 
 LOG_DIR="/usr/data/source/logs"
-LOG_FILE="${LOG_DIR}/${DATE}.log"
+LOG_FILE_PREFIX="${LOG_DIR}/${DATE}"
+LOG_FILE="${LOG_FILE_PREFIX}.log"
 LOG_FILE_SHORT="${LOG_DIR}/${DATE}.slog"
 SOURCES_DIR="/usr/data/source/git/opBSD"
 LOCK_DIR="${SOURCES_DIR}"
@@ -51,35 +52,6 @@ err()
 	log "ERROR: $*"
 	exit 1
 }
-
-if [ "X${1}" != "XTRACKED" ]
-then
-	if [ ! -d ${LOG_DIR} ]
-	then
-		mkdir -p ${LOG_DIR}
-		if [ $? != 0 ]
-		then
-			err "missing log dir"
-		fi
-	fi
-
-	if [ -f ${LOCK_FILE} ]
-	then
-		err "lock file exists"
-	fi
-
-	touch ${LOCK_FILE}
-	script ${LOG_FILE} ${0} TRACKED ${DATE} ${*}
-	unlink ${LOCK_FILE}
-else
-	DATE=${2}
-
-	if [ "X${3}" = "Xforced_mode" ]
-	then
-		forced_mode="yes"
-	fi
-
-fi
 
 ###############################################################################
 ###############################################################################
@@ -114,6 +86,13 @@ get_revision()
 	git rev-list ${_branch} -1
 }
 
+transform_branch_to_filename()
+{
+	_path=$1
+
+	echo ${_path} | tr '/' '_'
+}
+
 prepare_branch()
 {
 	_branch=$1
@@ -131,6 +110,9 @@ prepare_branch()
 
 build_release()
 {
+	_branch=$1
+	_log_name="${LOG_FILE_PREFIX}-`transform_branch_to_filename ${_branch}`"
+
 	cd ${HARDENEDBSD_STABLE_DIR}
 
 	if [ ! -d release ]
@@ -145,7 +127,7 @@ build_release()
 		err "missing release.sh"
 	fi
 
-	sh -x ./release.sh -c ${RELEASE_CONF}
+	sh -x ./release.sh -c ${RELEASE_CONF} > ${_log_name}
 	ret=$?
 
 	if [ $ret = 0 ]
@@ -166,32 +148,69 @@ publish_release()
 ###############################################################################
 ###############################################################################
 
-check_or_create_repo ${HARDENEDBSD_TOOLS_DIR} ${HARDENEDBSD_TOOLS_REPO}
-check_or_create_repo ${HARDENEDBSD_STABLE_DIR} ${HARDENEDBSD_STABLE_REPO}
+main()
+{
+	check_or_create_repo ${HARDENEDBSD_TOOLS_DIR} ${HARDENEDBSD_TOOLS_REPO}
+	check_or_create_repo ${HARDENEDBSD_STABLE_DIR} ${HARDENEDBSD_STABLE_REPO}
 
-cd ${HARDENEDBSD_STABLE_DIR}
+	cd ${HARDENEDBSD_STABLE_DIR}
 
-old_revision_10=`get_revision origin/${BRANCH_10}`
-old_revision_current=`get_revision origin/${BRANCH_current}`
+	old_revision_10=`get_revision origin/${BRANCH_10}`
+	old_revision_current=`get_revision origin/${BRANCH_current}`
 
-git fetch origin
+	git fetch origin
 
-new_revision_10=`get_revision origin/${BRANCH_10}`
-new_revision_current=`get_revision origin/${BRANCH_current}`
+	new_revision_10=`get_revision origin/${BRANCH_10}`
+	new_revision_current=`get_revision origin/${BRANCH_current}`
 
-info "10-STABLE revisions: old ${old_revision_10} new ${new_revision_10}"
-info "11-CURRENT revisions: old ${old_revision_current} new ${new_revision_current}"
+	info "10-STABLE revisions: old ${old_revision_10} new ${new_revision_10}"
+	info "11-CURRENT revisions: old ${old_revision_current} new ${new_revision_current}"
 
-if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_mode}" = "Xyes" ]
+	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_mode}" = "Xyes" ]
+	then
+		prepare_branch ${BRANCH_10}
+		build_release ${BRANCH_10}
+		publish_release
+	fi
+
+	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_mode}" = "Xyes" ]
+	then
+		prepare_branch ${BRANCH_current}
+		build_release ${BRANCH_current}
+		publish_release
+	fi
+}
+
+###############################################################################
+###############################################################################
+
+if [ "X${1}" != "XTRACKED" ]
 then
-	prepare_branch ${BRANCH_10}
-	build_release
-	publish_release
+	if [ ! -d ${LOG_DIR} ]
+	then
+		mkdir -p ${LOG_DIR}
+		if [ $? != 0 ]
+		then
+			err "missing log dir"
+		fi
+	fi
+
+	if [ -f ${LOCK_FILE} ]
+	then
+		err "lock file exists"
+	fi
+
+	script ${LOG_FILE} ${0} TRACKED ${DATE} ${*}
+else
+	DATE=${2}
+
+	if [ "X${3}" = "Xforced_mode" ]
+	then
+		forced_mode="yes"
+	fi
+
+	touch ${LOCK_FILE}
+	main
+	unlink ${LOCK_FILE}
 fi
 
-if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_mode}" = "Xyes" ]
-then
-	prepare_branch ${BRANCH_current}
-	build_release
-	publish_release
-fi
