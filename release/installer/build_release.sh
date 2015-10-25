@@ -18,6 +18,9 @@ BRANCH_10="hardened/10-stable/master"
 BRANCH_current="hardened/current/master"
 
 LOG_DIR="/usr/data/source/logs"
+LOG_DIR_INFO="/usr/data/source/logs/info"
+LOG_DIR_DONE="/usr/data/source/logs/done"
+LOG_DIR_FAILED="/usr/data/source/logs/failed"
 LOG_FILE_PREFIX="${LOG_DIR}/${DATE}"
 LOG_FILE="${LOG_FILE_PREFIX}.log"
 LOG_FILE_SHORT="${LOG_DIR}/${DATE}.slog"
@@ -50,7 +53,7 @@ warn()
 err()
 {
 	log "ERROR: $*"
-	exit 1
+	exit 255
 }
 
 ###############################################################################
@@ -115,6 +118,8 @@ build_release()
 
 	cd ${HARDENEDBSD_STABLE_DIR}
 
+	info "build(${_branch}) start"
+
 	if [ ! -d release ]
 	then
 		err "missing release dir"
@@ -132,9 +137,9 @@ build_release()
 
 	if [ $ret = 0 ]
 	then
-		info "build done"
+		info "build(${_branch}) done"
 	else
-		info "build failed"
+		info "build(${_branch}) failed"
 	fi
 
 	return ${ret}
@@ -142,7 +147,17 @@ build_release()
 
 publish_release()
 {
+	_branch=$1
+	_status=$2
+
 	echo "TODO"
+
+	if [ ${_status} = 0 ]
+	then
+		cat ${LOG_FILE_SHORT} | mail -s "[DONE] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
+	else
+		cat ${LOG_FILE_SHORT} | mail -c core@hardenedbsd.org -c op@hardenedbsd.org -s "[FAILED] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
+	fi
 }
 
 ###############################################################################
@@ -150,6 +165,15 @@ publish_release()
 
 main()
 {
+	_do_build=0
+
+	if [ -f ${LOCK_FILE} ]
+	then
+		err "lock file exists"
+	fi
+
+	touch ${LOCK_FILE}
+
 	check_or_create_repo ${HARDENEDBSD_TOOLS_DIR} ${HARDENEDBSD_TOOLS_REPO}
 	check_or_create_repo ${HARDENEDBSD_STABLE_DIR} ${HARDENEDBSD_STABLE_REPO}
 
@@ -168,16 +192,31 @@ main()
 
 	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_mode}" = "Xyes" ]
 	then
+		_do_build=$(($a+1))
 		prepare_branch ${BRANCH_10}
 		build_release ${BRANCH_10}
-		publish_release
+		_build_status=$?
+		publish_release ${BRANCH_10} ${_build_status}
 	fi
 
 	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_mode}" = "Xyes" ]
 	then
+		_do_build=$(($a+1))
 		prepare_branch ${BRANCH_current}
 		build_release ${BRANCH_current}
-		publish_release
+		_build_status=$?
+		publish_release ${BRANCH_current} ${_build_status}
+	fi
+
+	unlink ${LOCK_FILE}
+
+	if [ ${_do_build} != 0 ]
+	then
+		return 0
+	else
+		info "no new build required, all version up to date"
+
+		return 1
 	fi
 }
 
@@ -186,21 +225,36 @@ main()
 
 if [ "X${1}" != "XTRACKED" ]
 then
-	if [ ! -d ${LOG_DIR} ]
-	then
-		mkdir -p ${LOG_DIR}
-		if [ $? != 0 ]
+	for i in ${LOG_DIR} ${LOG_DIR_INFO} ${LOG_DIR_DONE} ${LOG_DIR_FAILED}
+	do
+		if [ ! -d ${i} ]
 		then
-			err "missing log dir"
+			mkdir -p ${i}
+			if [ $? != 0 ]
+			then
+				err "missing log dir"
+			fi
 		fi
-	fi
-
-	if [ -f ${LOCK_FILE} ]
-	then
-		err "lock file exists"
-	fi
+	done
 
 	script ${LOG_FILE} ${0} TRACKED ${DATE} ${*}
+	_ret=$?
+
+	for j in ${LOG_FILE_PREFIX}*
+	do
+		case ${_ret} in
+			0)
+				mv ${j} ${LOG_DIR_DONE}
+				;;
+			1)
+				mv ${j} ${LOG_DIR_INFO}
+				;;
+			*)
+				mv ${j} ${LOG_DIR_FAILED}
+				;;
+		esac
+	done
+
 else
 	DATE=${2}
 
@@ -209,8 +263,6 @@ else
 		forced_mode="yes"
 	fi
 
-	touch ${LOCK_FILE}
 	main
-	unlink ${LOCK_FILE}
 fi
 
