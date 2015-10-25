@@ -192,7 +192,7 @@ main()
 	info "10-STABLE revisions: old ${old_revision_10} new ${new_revision_10}"
 	info "11-CURRENT revisions: old ${old_revision_current} new ${new_revision_current}"
 
-	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_mode}" = "Xyes" ]
+	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_build}" = "Xyes" ]
 	then
 		_do_build=$(($a+1))
 		prepare_branch ${BRANCH_10}
@@ -201,7 +201,7 @@ main()
 		publish_release ${BRANCH_10} ${_build_status}
 	fi
 
-	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_mode}" = "Xyes" ]
+	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_build}" = "Xyes" ]
 	then
 		_do_build=$(($a+1))
 		prepare_branch ${BRANCH_current}
@@ -260,9 +260,9 @@ then
 else
 	DATE=${2}
 
-	if [ "X${3}" = "Xforced_mode" ]
+	if [ "X${3}" = "Xforced_build" ]
 	then
-		forced_mode="yes"
+		forced_build="yes"
 	fi
 
 	main
