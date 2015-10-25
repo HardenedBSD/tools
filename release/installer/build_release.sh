@@ -172,6 +172,8 @@ main()
 		err "lock file exists"
 	fi
 
+	trap "echo 'lockfile removed'; unlink ${LOCK_FILE}" SIGINT
+
 	touch ${LOCK_FILE}
 
 	check_or_create_repo ${HARDENEDBSD_TOOLS_DIR} ${HARDENEDBSD_TOOLS_REPO}
