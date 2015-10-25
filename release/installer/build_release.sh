@@ -12,6 +12,9 @@
 # signing
 #
 
+PATH=${PATH}:/usr/local/bin
+export PATH
+
 DATE=`date "+%Y%m%d%H%M%S"`
 
 BRANCH_10="hardened/10-stable/master"
