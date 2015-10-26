@@ -11,7 +11,7 @@ set LOCK="${SOURCE_DIR}/ports-repo-lock"
 set DST_MAIL="robot@hardenedbsd.org"
 set ENABLE_MAIL="YES"
 
-set PATH="${PATH}:/usr/local/bin"
+setenv PATH "${PATH}:/usr/local/bin"
 
 test -d $LOGS || mkdir -p $LOGS
 
