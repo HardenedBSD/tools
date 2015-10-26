@@ -221,13 +221,13 @@ fixups()
 
 		for i in $(find ${_R_dir} -name "*.iso" -or -name "*.img")
 		do
-			_local _new_name=`echo ${i} | sed "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g"`
+			local _new_name=`echo ${i} | sed "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g"`
 			mv -v ${i} ${_new_name}
 		done
 
 		for i in $(find ${_R_dir} -depth 1 -name "CHECKSUM*")
 		do
-			sed -i'' -e "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g"
+			sed -i'' -e "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g" ${i}
 		done
 	fi
 }
