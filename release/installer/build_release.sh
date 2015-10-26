@@ -4,11 +4,8 @@
 # TODO
 # ----
 # proper logging
-# email about the build
 # force mode
-# initial mode
 # error recovery
-# publisher module
 # signing
 #
 
@@ -36,6 +33,10 @@ HARDENEDBSD_STABLE_REPO="${SOURCES_REPO}/hardenedBSD-stable.git"
 HARDENEDBSD_TOOLS_DIR="${SOURCES_DIR}/tools.git"
 HARDENEDBSD_TOOLS_REPO="${SOURCES_REPO}/tools.git"
 RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/HardenedBSD-stable-autodetect-git-release.conf"
+
+WWW_BASE="/usr/data/release/releases"
+WWW_RELEASE_DIR="${WWW_BASE}/pub/HardenedBSD/releases/amd64/amd64"
+WWW_ISO_DIR="${WWW_BASE}/pub/FreeBSD/releases/amd64/amd64/ISO-IMAGES"
 
 log()
 {
@@ -207,35 +208,68 @@ build_release()
 	return ${ret}
 }
 
-publish_release()
-{
-	local _branch=$1
-	local _status=$2
-
-	echo "TODO"
-
-	if [ ${_status} = 0 ]
-	then
-		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
-	else
-		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -c core@hardenedbsd.org -s "[FAILED] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
-	fi
-}
-
 fixups()
 {
 	local _branch="$1"
 	local _chroot_dir="`get_branch_specific ${_branch} CHROOT`"
+	local _hbsd_name_tag="`get_branch_specific ${_branch} HBSD_NAME_TAG`"
 	local _R_dir="${_chroot_dir}/R"
 
 	if [ -d ${_R_dir} ]
 	then
-		for i in ${_R_dir}/*.{img,iso}
+		set_branch_specific ${_branch} RELEASE_DIR "${_R_dir}"
+
+		for i in $(find ${_R_dir} -name "*.iso" -or -name "*.img")
 		do
-			info "TODO: rename and sign $i"
+			_local _new_name=`echo ${i} | sed "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g"`
+			mv -v ${i} ${_new_name}
+		done
+
+		for i in $(find ${_R_dir} -depth 1 -name "CHECKSUM*")
+		do
+			sed -i'' -e "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g"
 		done
 	fi
 }
+
+publish_release()
+{
+	local _branch=$1
+	local _status=$2
+	local _last_build_from_branch="`transform_branch_to_filename ${_branch}`"
+	local _hbsd_name_tag="`get_branch_specific ${_branch} HBSD_NAME_TAG`"
+	local _hbsd_date_tag="`get_branch_specific ${_branch} HBSD_DATE_TAG`"
+	local _www_iso_dir="${WWW_ISO_DIR}/${_hbsd_name_tag}"
+	local _www_iso_dir_symlink="${WWW_ISO_DIR}/${_hbsd_date_tag}"
+	local _www_dist_dir="${WWW_RELEASE_DIR}/${_hbsd_name_tag}"
+	local _www_dist_dir_symlink="${WWW_RELEASE_DIR}/${_hbsd_date_tag}"
+	local _R_dir="`get_branch_specific ${_branch} RELEASE_DIR`"
+
+	if [ ${_status} = 0 ]
+	then
+		if [ ! -d ${WWW_BASE} ]
+		then
+			mkdir -p ${WWW_BASE}
+		fi
+
+		# XXX: first we should move the ftp directory
+		# because after the move only the iso files are left.
+		mv -v ${_R_dir}/ftp ${_www_dist_dir}
+		ln -vsf ${_www_dist_dir} ${_www_dist_dir_symlink}
+
+		# XXX: in theory only the iso, img, and checksum file are
+		# in the R directory
+		mv -v ${_R_dir} ${_www_iso_dir}
+		ln -vsf ${_www_iso_dir} ${_www_iso_dir_symlink}
+
+		ln -vsf ${_www_iso_dir} ${WWW_BASE}/${_last_build_from_branch}
+
+		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
+	else
+		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -c core@hardenedbsd.org -s "[FAILED] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
+	fi
+}
+
 
 ###############################################################################
 ###############################################################################
@@ -280,8 +314,8 @@ main()
 		then
 			_failed_builds=$(($_failed_builds+1))
 		fi
-		publish_release ${BRANCH_10} ${_build_status}
 		fixups ${BRANCH_10}
+		publish_release ${BRANCH_10} ${_build_status}
 	fi
 
 	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_build}" = "Xyes" ]
@@ -294,8 +328,8 @@ main()
 		then
 			_failed_builds=$(($_failed_builds+1))
 		fi
-		publish_release ${BRANCH_current} ${_build_status}
 		fixups ${BRANCH_current}
+		publish_release ${BRANCH_current} ${_build_status}
 	fi
 
 	unlink ${LOCK_FILE}
