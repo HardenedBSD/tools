@@ -39,7 +39,7 @@ RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/HardenedBSD-stable-
 
 log()
 {
-	echo "$*" | tee -a ${LOG_FILE_SHORT}
+	echo "`date` $*" | tee -a ${LOG_FILE_SHORT}
 }
 
 info()
@@ -59,16 +59,42 @@ err()
 	exit 255
 }
 
+transform_branch_to_filename()
+{
+	local _path="$1"
+
+	echo ${_path} | tr '\\/-+;|&$()*?!#[]{}' '_'
+}
+
+set_branch_specific()
+{
+	local _branch="`transform_branch_to_filename $1`"
+	local _var="$2"
+	shift
+	shift
+	local _param="$*"
+
+	eval ${_branch}_${_var}="\${_param}"
+}
+
+get_branch_specific()
+{
+	local _branch="`transform_branch_to_filename $1`"
+	local _var="$2"
+
+	eval echo \"\${${_branch}_${_var}}\"
+}
+
 ###############################################################################
 ###############################################################################
 
 check_or_create_repo()
 {
-	_dir=$1
-	_repo=$2
+	local _dir="$1"
+	local _repo="$2"
 
-	_parent_dir=`dirname ${_dir}`
-	_name=`basename ${_dir}`
+	local _parent_dir="`dirname ${_dir}`"
+	local _name="`basename ${_dir}`"
 
 	if [ ! -d ${_dir} ]
 	then
@@ -87,21 +113,14 @@ check_or_create_repo()
 
 get_revision()
 {
-	_branch=$1
+	local _branch="$1"
 
 	git rev-list ${_branch} -1
 }
 
-transform_branch_to_filename()
-{
-	_path=$1
-
-	echo ${_path} | tr '/' '_'
-}
-
 prepare_branch()
 {
-	_branch=$1
+	local _branch="$1"
 
 	cd ${HARDENEDBSD_STABLE_DIR}
 
@@ -114,10 +133,43 @@ prepare_branch()
 	git reset --hard origin/${_branch}
 }
 
+parse_release_metainfo()
+{
+	local _branch=$1
+
+	for i in $(get_branch_specific ${_branch} BUILD_INFO)
+	do
+		case ${i} in
+		c:*)
+			set_branch_specific ${_branch} CHROOT `echo ${i} | cut -d ':' -f 2`
+		;;
+		b:*)
+			set_branch_specific ${_branch} HBSD_BRANCH `echo ${i} | cut -d ':' -f 2`
+		;;
+		n:*)
+			set_branch_specific ${_branch} HBSD_NAME_TAG `echo ${i} | cut -d ':' -f 2`
+		;;
+		t:*)
+			set_branch_specific ${_branch} HBSD_DATE_TAG `echo ${i} | cut -d ':' -f 2`
+		;;
+		*)
+			echo "unknown metainfo: ${i}"
+		;;
+		esac
+	done
+
+	info "received metainfo: "
+	info "	`get_branch_specific ${_branch} CHROOT`"
+	info "	`get_branch_specific ${_branch} HBSD_BRANCH`"
+	info "	`get_branch_specific ${_branch} HBSD_TAG_NAME`"
+	info "	`get_branch_specific ${_branch} HBSD_DATE_TAG`"
+}
+
 build_release()
 {
-	_branch=$1
-	_log_name="${LOG_FILE_PREFIX}-`transform_branch_to_filename ${_branch}`"
+	local _branch=$1
+	local _log_name="${LOG_FILE_PREFIX}-`transform_branch_to_filename ${_branch}`"
+	local _branch_info_file=`mktemp`
 
 	cd ${HARDENEDBSD_STABLE_DIR}
 
@@ -135,8 +187,15 @@ build_release()
 		err "missing release.sh"
 	fi
 
-	sh -x ./release.sh -c ${RELEASE_CONF} > ${_log_name}
+	# XXX the fd 123 based stuff is s dirt hack, to get the basic informations
+	# from release.sh without parsing their output
+	sh -x ./release.sh -c ${RELEASE_CONF} 9>${_branch_info_file} 1>${_log_name} 2>&1
 	ret=$?
+
+	set_branch_specific ${_branch} BUILD_INFO `cat ${_branch_info_file}`
+	unlink ${_branch_info_file}
+
+	parse_release_metainfo ${_branch}
 
 	if [ $ret = 0 ]
 	then
@@ -150,16 +209,31 @@ build_release()
 
 publish_release()
 {
-	_branch=$1
-	_status=$2
+	local _branch=$1
+	local _status=$2
 
 	echo "TODO"
 
 	if [ ${_status} = 0 ]
 	then
-		cat ${LOG_FILE_SHORT} | mail -s "[DONE] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
+		cat ${LOG_FILE_SHORT} | mail -s "[DONE] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" op@hardenedbsd.org
 	else
-		cat ${LOG_FILE_SHORT} | mail -c core@hardenedbsd.org -c op@hardenedbsd.org -s "[FAILED] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
+		cat ${LOG_FILE_SHORT} | mail -s "[FAILED] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" op@hardenedbsd.org
+	fi
+}
+
+fixups()
+{
+	local _branch="$1"
+	local _chroot_dir="`get_branch_specific ${_branch} CHROOT`"
+	local _R_dir="${_chroot_dir}/R"
+
+	if [ -d ${_R_dir} ]
+	then
+		for i in ${_R_dir}/*.{img,iso}
+		do
+			info "TODO: rename and sign $i"
+		done
 	fi
 }
 
@@ -168,14 +242,15 @@ publish_release()
 
 main()
 {
-	_do_build=0
+	local _do_build=0
+	local _failed_builds=0
 
 	if [ -f ${LOCK_FILE} ]
 	then
 		err "lock file exists"
 	fi
 
-	trap "echo 'lockfile removed'; unlink ${LOCK_FILE}" SIGINT
+	trap "echo 'lockfile removed'; unlink ${LOCK_FILE}; exit 255" SIGINT
 
 	touch ${LOCK_FILE}
 
@@ -197,30 +272,44 @@ main()
 
 	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_build}" = "Xyes" ]
 	then
-		_do_build=$(($a+1))
+		_do_build=$(($_do_build+1))
 		prepare_branch ${BRANCH_10}
 		build_release ${BRANCH_10}
 		_build_status=$?
+		if [ ${_build_status} != 0 ]
+		then
+			_failed_builds=$(($_failed_builds+1))
+		fi
 		publish_release ${BRANCH_10} ${_build_status}
+		fixups ${BRANCH_10}
 	fi
 
 	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_build}" = "Xyes" ]
 	then
-		_do_build=$(($a+1))
+		_do_build=$(($_do_build+1))
 		prepare_branch ${BRANCH_current}
 		build_release ${BRANCH_current}
 		_build_status=$?
+		if [ ${_build_status} != 0 ]
+		then
+			_failed_builds=$(($_failed_builds+1))
+		fi
 		publish_release ${BRANCH_current} ${_build_status}
+		fixups ${BRANCH_current}
 	fi
 
 	unlink ${LOCK_FILE}
+
+	if [ ${_failed_builds} != 0 ]
+	then
+		return 255
+	fi
 
 	if [ ${_do_build} != 0 ]
 	then
 		return 0
 	else
 		info "no new build required, all version up to date"
-
 		return 1
 	fi
 }
