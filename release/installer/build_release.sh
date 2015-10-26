@@ -37,7 +37,7 @@ RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/HardenedBSD-stable-
 
 WWW_BASE="/usr/data/release/releases"
 WWW_RELEASE_DIR="${WWW_BASE}/pub/HardenedBSD/releases/amd64/amd64"
-WWW_ISO_DIR="${WWW_BASE}/pub/FreeBSD/releases/amd64/amd64/ISO-IMAGES"
+WWW_ISO_DIR="${WWW_BASE}/pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES"
 
 log()
 {
@@ -227,7 +227,7 @@ fixups()
 
 		for i in $(find ${_R_dir} -depth 1 -name "CHECKSUM*")
 		do
-			sed -i'' -e "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g" ${i}
+			sed -i '' -e "s/\(.*\)FreeBSD.*HBSD\(.*\)/\1${_hbsd_name_tag}\2/g" ${i}
 		done
 	fi
 }
@@ -236,7 +236,7 @@ publish_release()
 {
 	local _branch=$1
 	local _status=$2
-	local _last_build_from_branch="`transform_branch_to_filename ${_branch}`"
+	local _last_build_from_branch="`transform_branch_to_filename ${_branch}`-LAST"
 	local _hbsd_name_tag="`get_branch_specific ${_branch} HBSD_NAME_TAG`"
 	local _hbsd_date_tag="`get_branch_specific ${_branch} HBSD_DATE_TAG`"
 	local _www_iso_dir="${WWW_ISO_DIR}/${_hbsd_name_tag}"
