@@ -7,6 +7,7 @@
 # force mode
 # error recovery
 # signing
+# do not hardcode amd64/amd64 in WWW_* path, make them configurable
 #
 
 PATH=${PATH}:/usr/local/bin
@@ -50,7 +51,6 @@ info()
 
 warn()
 {
-
 	log "WARNING: $*"
 }
 
