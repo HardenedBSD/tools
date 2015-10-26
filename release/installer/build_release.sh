@@ -216,9 +216,9 @@ publish_release()
 
 	if [ ${_status} = 0 ]
 	then
-		cat ${LOG_FILE_SHORT} | mail -s "[DONE] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" op@hardenedbsd.org
+		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	else
-		cat ${LOG_FILE_SHORT} | mail -s "[FAILED] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" op@hardenedbsd.org
+		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -c core@hardenedbsd.org -s "[FAILED] HardenedBSD-stable ${_branch} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	fi
 }
 
