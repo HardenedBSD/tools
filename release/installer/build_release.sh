@@ -161,7 +161,7 @@ parse_release_metainfo()
 	info "received metainfo: "
 	info "	`get_branch_specific ${_branch} CHROOT`"
 	info "	`get_branch_specific ${_branch} HBSD_BRANCH`"
-	info "	`get_branch_specific ${_branch} HBSD_TAG_NAME`"
+	info "	`get_branch_specific ${_branch} HBSD_NAME_TAG`"
 	info "	`get_branch_specific ${_branch} HBSD_DATE_TAG`"
 }
 
