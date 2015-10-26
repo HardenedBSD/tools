@@ -247,10 +247,13 @@ publish_release()
 
 	if [ ${_status} = 0 ]
 	then
-		if [ ! -d ${WWW_BASE} ]
-		then
-			mkdir -p ${WWW_BASE}
-		fi
+		for i in ${WWW_BASE} ${WWW_ISO_DIR} ${WWW_RELEASE_DIR}
+		do
+			if [ ! -d ${i} ]
+			then
+				mkdir -p ${i}
+			fi
+		done
 
 		# XXX: first we should move the ftp directory
 		# because after the move only the iso files are left.
