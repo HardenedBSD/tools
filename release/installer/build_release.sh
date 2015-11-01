@@ -265,6 +265,7 @@ publish_release()
 		mv -v ${_R_dir} ${_www_iso_dir}
 		ln -vsf ${_www_iso_dir} ${_www_iso_dir_symlink}
 
+		unlink ${WWW_BASE}/${_last_build_from_branch}
 		ln -vsf ${_www_iso_dir} ${WWW_BASE}/${_last_build_from_branch}
 
 		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
