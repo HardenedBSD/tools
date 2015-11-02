@@ -138,6 +138,7 @@ if ( $_ok != "yes" ) then
 	exit 1
 endif
 
+git log -p ${_lbranch}..${_rbranch}
 git diff --stat ${_lbranch} ${_rbranch}
 git diff ${_lbranch} ${_rbranch}
 echo "--"
