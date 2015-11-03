@@ -308,7 +308,7 @@ main()
 	info "10-STABLE revisions: old ${old_revision_10} new ${new_revision_10}"
 	info "11-CURRENT revisions: old ${old_revision_current} new ${new_revision_current}"
 
-	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_build}" = "Xyes" ]
+	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_build}" = "Xyes" ] || [ "X${forced_build}" = "X10-master" ]
 	then
 		_do_build=$(($_do_build+1))
 		prepare_branch ${BRANCH_10}
@@ -322,7 +322,7 @@ main()
 		publish_release ${BRANCH_10} ${_build_status}
 	fi
 
-	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_build}" = "Xyes" ]
+	if [ "${old_revision_current}" != "${new_revision_current}" ] || [ "X${forced_build}" = "Xyes" ] || [ "X${forced_build}" = "Xcurrent" ]
 	then
 		_do_build=$(($_do_build+1))
 		prepare_branch ${BRANCH_current}
@@ -390,9 +390,31 @@ then
 else
 	DATE=${2}
 
-	if [ "X${3}" = "Xforced_build" ]
+	if [ "X${3}" != "X" ]
 	then
-		forced_build="yes"
+		case ${3} in
+		forced_build)
+			forced_build="yes"
+			;;
+		forced_build:*)
+				_branch="`echo ${3} | cut -d ':' -f 2`"
+				case ${_branch} in
+				10-stable)
+					forced_build="10-stable"
+					;;
+				current)
+					forced_build="current"
+					;;
+				*)
+					err "unknown forced build target: ${_branch}"
+				esac
+				info "forced build: ${forced_build}"
+			;;
+		*)
+				err "unknown parameter: ${3}"
+			;;
+		esac
+
 	fi
 
 	main
