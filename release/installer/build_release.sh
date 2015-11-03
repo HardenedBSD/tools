@@ -406,11 +406,13 @@ else
 					forced_build="current"
 					;;
 				*)
+					warn "valid targets: 10-stable, current"
 					err "unknown forced build target: ${_branch}"
 				esac
 				info "forced build: ${forced_build}"
 			;;
 		*)
+				warn "usage: ${0} [forced_build|forced_build:10-stable|forced_build:current]"
 				err "unknown parameter: ${3}"
 			;;
 		esac
