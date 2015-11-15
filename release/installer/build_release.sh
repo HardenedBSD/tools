@@ -369,7 +369,7 @@ then
 		fi
 	done
 
-	script ${LOG_FILE} ${0} TRACKED ${DATE} ${*}
+	script -qa ${LOG_FILE} ${0} TRACKED ${DATE} ${*}
 	_ret=$?
 
 	for j in ${LOG_FILE_PREFIX}*
