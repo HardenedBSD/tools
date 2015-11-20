@@ -308,7 +308,7 @@ main()
 	info "10-STABLE revisions: old ${old_revision_10} new ${new_revision_10}"
 	info "11-CURRENT revisions: old ${old_revision_current} new ${new_revision_current}"
 
-	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_build}" = "Xyes" ] || [ "X${forced_build}" = "X10-master" ]
+	if [ "${old_revision_10}" != "${new_revision_10}" ] || [ "X${forced_build}" = "Xyes" ] || [ "X${forced_build}" = "X10-stable" ]
 	then
 		_do_build=$(($_do_build+1))
 		prepare_branch ${BRANCH_10}
