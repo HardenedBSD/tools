@@ -34,6 +34,7 @@ HARDENEDBSD_STABLE_REPO="${SOURCES_REPO}/hardenedBSD-stable.git"
 HARDENEDBSD_TOOLS_DIR="${SOURCES_DIR}/tools.git"
 HARDENEDBSD_TOOLS_REPO="${SOURCES_REPO}/tools.git"
 RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/HardenedBSD-stable-autodetect-git-release.conf"
+SIGN_COMMAND="/root/bin/hbsd_sign.csh"
 
 WWW_BASE="/usr/data/release/releases"
 WWW_RELEASE_DIR="${WWW_BASE}/pub/HardenedBSD/releases/amd64/amd64"
@@ -267,6 +268,14 @@ publish_release()
 
 		unlink ${WWW_BASE}/${_last_build_from_branch}
 		ln -vsf ${_www_iso_dir} ${WWW_BASE}/${_last_build_from_branch}
+
+		# sign the MANIFEST file and the CHECKSUM.*
+		if [ -e ${SIGN_COMMAND} ]
+		then
+			find ${_www_iso_dir} -name "CHECKSUM.*" -type f -exec ${SIGN_COMMAND} {} \;
+			find ${_www_dist_dir} -name "MANIFEST" -type f -exec ${SIGN_COMMAND} {} \;
+
+		fi
 
 		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	else
