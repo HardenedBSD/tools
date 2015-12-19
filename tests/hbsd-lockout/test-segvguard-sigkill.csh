@@ -30,7 +30,7 @@ make ${TEST_NAME}
 set a = 0
 set a_max = `sysctl -n hardening.pax.segvguard.max_crashes`
 # the last must failed
-@ a_max = $a_max + 1
+@ a_max = $a_max 
 while ($a < $a_max)
 	./${TEST_NAME}&
 	kill -KILL $!
