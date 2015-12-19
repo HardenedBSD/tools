@@ -40,6 +40,10 @@ make ${TEST_NAME}
 
 sysctl hardening.pax.disallow_map32bit.status=1
 secadm flush
+sysctl hardening.pax.aslr.map32bit_len=18
+repeat 6 ./${TEST_NAME}
+
+sysctl hardening.pax.aslr.map32bit_len=24
 repeat 6 ./${TEST_NAME}
 
 # restore system policy

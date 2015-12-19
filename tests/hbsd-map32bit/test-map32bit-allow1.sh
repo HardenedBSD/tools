@@ -53,6 +53,10 @@ __EOF
 
 secadm flush
 secadm -c ${TEST_DIR}/secadm.rules set
+sysctl hardening.pax.aslr.map32bit_len=18
+repeat 6 ./${TEST_NAME}
+
+sysctl hardening.pax.aslr.map32bit_len=24
 repeat 6 ./${TEST_NAME}
 
 # restore system policy
