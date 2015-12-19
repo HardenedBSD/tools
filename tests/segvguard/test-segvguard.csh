@@ -23,7 +23,7 @@ __EOF
 make ${TEST_NAME}
 
 set a = 0
-set a_max = `sysctl -n security.pax.segvguard.max_crashes`
+set a_max = `sysctl -n hardening.pax.segvguard.max_crashes`
 while ($a < $a_max)
 	./${TEST_NAME}
 	@ a = $a + 1
@@ -33,7 +33,7 @@ mv ${TEST_NAME}{,1}
 cp ${TEST_NAME}{1,2}
 
 set a = 0
-set a_max = `sysctl -n security.pax.segvguard.max_crashes`
+set a_max = `sysctl -n hardening.pax.segvguard.max_crashes`
 while ($a < $a_max)
 	echo ${TEST_NAME}1
 	./${TEST_NAME}1
