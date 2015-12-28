@@ -51,7 +51,7 @@ cat > ${TEST_DIR}/secadm.rules<<__EOF
 }
 __EOF
 
-sysctl hardening.pax.disallow_map32bit.status=2
+sysctl hardening.pax.disallow_map32bit.status=1
 secadm flush
 secadm -c ${TEST_DIR}/secadm.rules set
 repeat 6 ./${TEST_NAME}
