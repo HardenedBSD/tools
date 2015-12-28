@@ -1,7 +1,9 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 
 set TEST_NAME = "test-map32bit-allow2"
 set TEST_DIR = "/tmp/pax-tests/${USER}/map32bit/"
+set ORIG_STATUS = `sysctl -n hardening.pax.disallow_map32bit.status`
+set ORIG_RAND = `sysctl -n hardening.pax.aslr.map32bit_len`
 
 echo "${TEST_NAME}"
 
@@ -38,6 +40,7 @@ __EOF
 
 make ${TEST_NAME}
 
+# set opt-in
 sysctl hardening.pax.disallow_map32bit.status=1
 secadm flush
 sysctl hardening.pax.aslr.map32bit_len=18
@@ -48,3 +51,5 @@ repeat 6 ./${TEST_NAME}
 
 # restore system policy
 secadm set
+sysctl hardening.pax.disallow_map32bit.status=${ORIG_STATUS}
+sysctl hardening.pax.aslr.map32bit_len=${ORIG_RAND}
