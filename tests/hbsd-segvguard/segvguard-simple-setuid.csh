@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 
 set TEST_NAME = "test-segvguard-simple-setuid"
 set TEST_DIR = "/tmp/pax-tests/${USER}/segvguard/"
