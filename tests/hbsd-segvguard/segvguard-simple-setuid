@@ -12,7 +12,7 @@ cat > ${TEST_NAME}.c<<__EOF
 int
 main(int argc, char **argv)
 {
-	volatile int *p;
+	volatile int *p = 0;
 
 	return (*p);
 }
