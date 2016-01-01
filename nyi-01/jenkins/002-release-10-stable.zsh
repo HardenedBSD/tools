@@ -21,16 +21,6 @@ while getopts 't:' o; do
                         target="TARGET=i386 TARGET_ARCH=i386"
                         targetdir="i386"
                         ;;
-                    beaglebone)
-                        target="TARGET=arm TARGET_ARCH=armv6"
-                        targetdir="beaglebone"
-                        kernel="BEAGLEBONE-HARDENEDBSD"
-                        ;;
-		upstream-amd64)
-			target="TARGET=amd64 TARGET_ARCH=amd64"
-			targetdir="amd64"
-			kernel="GENERIC"
-			;;
                     defaut)
                         echo "Invalid target!"
                         exit 1
@@ -56,8 +46,9 @@ if [ ! -d ${_ISO_DIR} ]; then
     mkdir -p ${_ISO_DIR}
 fi
 
-_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
-_INSTALLER_PREFIX="HardenedBSD-10-STABLE_${_L_JOB_NAME}-"
+#_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
+#_INSTALLER_PREFIX="HardenedBSD-10-STABLE_${_L_JOB_NAME}-"
+_INSTALLER_PREFIX="${JOB_NAME}"
 
 # iso and img file - aka installers
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.iso' -o -name '*.img'); do

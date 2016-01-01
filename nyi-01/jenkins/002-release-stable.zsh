@@ -8,7 +8,8 @@ export __SRC_CONF="/dev/null"
 export MAKE_CONF="/dev/null"
 export SRC_CONF="/dev/null"
 
-_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
+#_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
+_INSTALLER_PREFIX="${JOB_NAME}"
 
 while getopts 't:' o; do
     case "${o}" in
@@ -23,28 +24,11 @@ while getopts 't:' o; do
                         target="TARGET=i386 TARGET_ARCH=i386"
                         targetdir="i386"
                         ;;
-                    beaglebone)
-                        target="TARGET=arm TARGET_ARCH=armv6"
-                        targetdir="beaglebone"
-                        kernel="BEAGLEBONE-HARDENEDBSD"
-                        ;;
-		    upstream-amd64)
-			target="TARGET=amd64 TARGET_ARCH=amd64"
-			targetdir="amd64"
-			kernel="GENERIC"
-			_INSTALLER_PREFIX="FreeBSD-11-CURRENT_${_L_JOB_NAME}-"
-			;;
 		    opbsd-fortify-amd64)
 			target="TARGET=amd64 TARGET_ARCH=amd64"
 			targetdir="amd64"
 			kernel="GENERIC"
 			_INSTALLER_PREFIX="opBSD-11-CURRENT_${_L_JOB_NAME}-"
-			;;
-		    upstream-aslr-amd64)
-			target="TARGET=amd64 TARGET_ARCH=amd64"
-			targetdir="amd64"
-			kernel="GENERIC-ASLR"
-			_INSTALLER_PREFIX="FreeBSD-11-CURRENT_${_L_JOB_NAME}-"
 			;;
                     defaut)
                         echo "Invalid target!"
@@ -69,10 +53,6 @@ fi
 
 if [ ! -d ${_ISO_DIR} ]; then
     mkdir -p ${_ISO_DIR}
-fi
-
-if [ -z ${_INSTALLER_PREFIX} ]; then
-	_INSTALLER_PREFIX="HardenedBSD-11-CURRENT_${_L_JOB_NAME}-"
 fi
 
 # iso and img file - aka installers
