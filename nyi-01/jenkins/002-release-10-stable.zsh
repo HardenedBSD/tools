@@ -48,7 +48,7 @@ fi
 
 #_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
 #_INSTALLER_PREFIX="HardenedBSD-10-STABLE_${_L_JOB_NAME}-"
-_INSTALLER_PREFIX="${JOB_NAME}"
+_INSTALLER_PREFIX="${JOB_NAME}-"
 
 # iso and img file - aka installers
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.iso' -o -name '*.img'); do

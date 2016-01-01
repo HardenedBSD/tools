@@ -9,7 +9,7 @@ export MAKE_CONF="/dev/null"
 export SRC_CONF="/dev/null"
 
 #_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
-_INSTALLER_PREFIX="${JOB_NAME}"
+_INSTALLER_PREFIX="${JOB_NAME}-"
 
 while getopts 't:' o; do
     case "${o}" in
