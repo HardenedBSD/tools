@@ -20,6 +20,7 @@ git branch --track {,origin/}hardened/current/master
 
 # HardenedBSD 10-STABLE topic branches
 git branch --track {,origin/}hardened/10-stable/master
+git branch --track {,origin/}hardened/10-stable/unstable
 
 # HardenedBSD 10.2-RELENG topic branches
 git branch --track {,origin/}hardened/10.2-releng/master
