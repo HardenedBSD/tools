@@ -60,7 +60,7 @@ for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -n
     _dst_file="${_ISO_DIR}/${_INSTALLER_PREFIX}${file##*/}"
     cp -v ${file} ${_dst_file}
     sha256 ${_dst_file} >> ${_ISO_DIR}/CHECKSUMS.SHA256
-    md5 ${_dst_file} >> ${_ISO_DIR}/CHECKSUMS.MD5
+    sha512 ${_dst_file} >> ${_ISO_DIR}/CHECKSUMS.SHA512
     gpg --sign -a --detach -u 819B11A26FFD188D -o ${_ISO_DIR}/$(basename ${_dst_file}).asc ${_dst_file}
 done
 
@@ -68,7 +68,7 @@ done
 for file in $(find /usr/obj/jenkins/workspace/${JOB_NAME}/release -maxdepth 1 -name '*.txz' -or -name 'MANIFEST'); do
     cp -v ${file} ${_TAR_DIR}
     sha256 ${file} >> ${_TAR_DIR}/CHECKSUMS.SHA256
-    md5 ${file} >> ${_TAR_DIR}/CHECKSUMS.MD5
+    sha512 ${file} >> ${_TAR_DIR}/CHECKSUMS.SHA512
     gpg --sign -a --detach -u 819B11A26FFD188D -o ${_TAR_DIR}/$(basename ${file}).asc ${file}
 done
 
