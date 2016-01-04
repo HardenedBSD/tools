@@ -28,6 +28,6 @@ git branch --track {,origin/}hardened/10.2-releng/master
 # HardenedBSD CURRENT topic branches
 git branch --track {,origin/}hardened/current/aslr
 git branch --track {,origin/}hardened/current/intel-smap
-git branch --track {,origin/}hardened/current/segvguard
+git branch --track {,origin/}hardened/current/segvguard-ng
 git branch --track {,origin/}hardened/current/unstable
 git branch --track {,origin/}hardened/current/log
