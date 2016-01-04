@@ -6,8 +6,7 @@ hardened/10.2-releng/master:freebsd/releng/10.2
 master:freebsd/master
 hardened/current/master:freebsd/master
 hardened/current/aslr:origin/hardened/current/master
-hardened/current/segvguard:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/master
-hardened/current/unstable:origin/hardened/current/segvguard
+hardened/current/unstable:origin/hardened/current/segvguard-ng
 hardened/current/unstable:origin/hardened/current/log
