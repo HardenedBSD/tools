@@ -3,13 +3,14 @@
 target="SHOULD_FAIL"
 targetdir=""
 kernel="HARDENEDBSD"
+date="`date "+%Y%m%d%H%M"`"
 export __MAKE_CONF="/dev/null"
 export __SRC_CONF="/dev/null"
 export MAKE_CONF="/dev/null"
 export SRC_CONF="/dev/null"
 
 #_L_JOB_NAME=`echo ${JOB_NAME} | tr '[:upper:]' '[:lower:]'`
-_INSTALLER_PREFIX="${JOB_NAME}-"
+_INSTALLER_PREFIX="${JOB_NAME}-s${date}-"
 
 while getopts 't:' o; do
     case "${o}" in
