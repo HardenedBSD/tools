@@ -42,8 +42,8 @@ while getopts 't:' o; do
 done
 
 cd release
-sudo make clean ${target}
-sudo make real-release KERNCONF=${kernel} NOPORTS=1 ${target}
+sudo make -s clean ${target}
+sudo make -s real-release KERNCONF=${kernel} NOPORTS=1 ${target}
 
 _TAR_DIR="/jenkins/releases/${JOB_NAME}/build-${BUILD_NUMBER}/"
 _ISO_DIR="${_TAR_DIR}/ISO-IMAGES"

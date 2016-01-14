@@ -48,9 +48,5 @@ while getopts 'j:t:' o; do
     esac
 done
 
-
-sudo -u root -g wheel make clean cleandir
-sudo -u root -g wheel make -C release clean cleandir
-
 sudo -u root -g wheel make -j${njobs} kernel-toolchain KERNCONF=${kernel} ${target}
 sudo -u root -g wheel make -j${njobs} buildkernel KERNCONF=${kernel} ${target}

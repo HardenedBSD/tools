@@ -58,5 +58,5 @@ while getopts 'j:t:' o; do
     esac
 done
 
-make -j${njobs} buildworld ${target}
-make -j${njobs} buildkernel KERNCONF=${kernel} ${target}
+make -s -j${njobs} buildworld ${target}
+make -s -j${njobs} buildkernel KERNCONF=${kernel} ${target}

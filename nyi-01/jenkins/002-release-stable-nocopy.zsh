@@ -32,7 +32,7 @@ while getopts 't:' o; do
 done
 
 cd release
-sudo make clean ${target}
-sudo make real-release KERNCONF=${kernel} NOPORTS=1 ${target}
+sudo make -s clean ${target}
+sudo make -s real-release KERNCONF=${kernel} NOPORTS=1 ${target}
 
 echo "for installer images and distfiles see http://installer.hardenedbsd.org"
