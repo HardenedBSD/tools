@@ -33,7 +33,7 @@ HARDENEDBSD_STABLE_DIR="${SOURCES_DIR}/opBSD.git"
 HARDENEDBSD_STABLE_REPO="${SOURCES_REPO}/opBSD.git"
 HARDENEDBSD_TOOLS_DIR="${SOURCES_DIR}/tools.git"
 HARDENEDBSD_TOOLS_REPO="${SOURCES_REPO}/tools.git"
-RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/opBSD-stable-autodetect-git-release.conf"
+RELEASE_CONF="${SOURCES_DIR}/tools.git/opbsd/release-confs/opBSD-stable-autodetect-git-release.conf"
 SIGN_COMMAND="/root/bin/hbsd_sign.csh"
 
 WWW_BASE="/usr/data/release/releases"
