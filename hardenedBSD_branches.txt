@@ -7,6 +7,7 @@ master:freebsd/master
 hardened/current/master:freebsd/master
 hardened/current/aslr:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
+hardened/current/segvguard-ng:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/segvguard-ng
 hardened/current/unstable:origin/hardened/current/log
