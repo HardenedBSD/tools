@@ -3,7 +3,6 @@
 set TEST_NAME = "test-map32bit-allow1"
 set TEST_DIR = "/tmp/pax-tests/${USER}/map32bit/"
 set ORIG_STATUS = `sysctl -n hardening.pax.disallow_map32bit.status`
-set ORIG_RAND = `sysctl -n hardening.pax.aslr.map32bit_len`
 
 echo "${TEST_NAME}"
 
@@ -58,14 +57,9 @@ sysctl hardening.pax.disallow_map32bit.status=2
 secadm flush
 secadm -c ${TEST_DIR}/secadm.rules set
 
-sysctl hardening.pax.aslr.map32bit_len=18
-repeat 6 ./${TEST_NAME}
-
-sysctl hardening.pax.aslr.map32bit_len=24
 repeat 6 ./${TEST_NAME}
 
 # restore system policy
 secadm flush
 secadm set
 sysctl hardening.pax.disallow_map32bit.status=${ORIG_STATUS}
-sysctl hardening.pax.aslr.map32bit_len=${ORIG_RAND}
