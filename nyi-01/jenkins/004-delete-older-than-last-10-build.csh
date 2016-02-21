@@ -7,6 +7,7 @@ endif
 
 set _dir="/jenkins/releases/${JOB_NAME}"
 
+cd ${_dir}
 pwd | grep "${_dir}"
 set ret=$?
 if ( $ret != 0 ) then
