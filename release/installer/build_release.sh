@@ -244,6 +244,7 @@ publish_release()
 	local _www_iso_dir_symlink="${WWW_ISO_DIR}/${_hbsd_date_tag}"
 	local _www_dist_dir="${WWW_RELEASE_DIR}/${_hbsd_name_tag}"
 	local _www_dist_dir_symlink="${WWW_RELEASE_DIR}/${_hbsd_date_tag}"
+	local _www_dist_dir_last_symlink="${WWW_RELEASE_DIR}/${_hbsd_date_tag%-*-*}-LAST"
 	local _R_dir="`get_branch_specific ${_branch} RELEASE_DIR`"
 
 	if [ ${_status} = 0 ]
@@ -266,6 +267,11 @@ publish_release()
 		mv -v ${_R_dir} ${_www_iso_dir}
 		ln -vsf ${_www_iso_dir} ${_www_iso_dir_symlink}
 
+		# this is required by bootonly medium
+		unlink ${_www_dist_dir_last_symlink}
+		ln -vsf ${_www_dist_dir} ${_www_dist_dir_last_symlink}
+
+		# this is for installer.hardenedbsd.org's main page's last links
 		unlink ${WWW_BASE}/${_last_build_from_branch}
 		ln -vsf ${_www_iso_dir} ${WWW_BASE}/${_last_build_from_branch}
 
