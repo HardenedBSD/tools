@@ -4,6 +4,8 @@ hardened/10-stable/master:freebsd/10-stable/master
 hardened/10-stable/unstable:origin/hardened/10-stable/master
 freebsd/10.2-releng/master:freebsd/releng/10.2
 hardened/10.2-releng/master:freebsd/10.2-releng/master
+freebsd/10.3-releng/master:freebsd/releng/10.3
+hardened/10.3-releng/master:freebsd/10.3-releng/master
 freebsd/current/master:freebsd/master
 hardened/current/master:freebsd/current/master
 hardened/current/aslr:origin/hardened/current/master
