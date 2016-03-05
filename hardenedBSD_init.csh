@@ -11,9 +11,10 @@ git remote add freebsd https://github.com/freebsd/freebsd.git
 git fetch freebsd
 
 # FreeBSD upstream repos
-git branch --track {,freebsd/}master
-git branch --track {,freebsd/}stable/10
-git branch --track {,freebsd/}releng/10.2
+git branch --track freebsd/current/master freebsd/master
+git branch --track freebsd/10-stable/master freebsd/stable/10
+git branch --track freebsd/10.2-releng/master freebsd/releng/10.2
+git branch --track freebsd/10.3-releng/master freebsd/releng/10.3
 
 # HardenedBSD master branch
 git branch --track {,origin/}hardened/current/master

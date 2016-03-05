@@ -1,10 +1,11 @@
 stable/10:freebsd/stable/10
-hardened/10-stable/master:freebsd/stable/10
+freebsd/10-stable/master:freebsd/stable/10
+hardened/10-stable/master:freebsd/10-stable/master
 hardened/10-stable/unstable:origin/hardened/10-stable/master
-releng/10.2:freebsd/releng/10.2
-hardened/10.2-releng/master:freebsd/releng/10.2
-master:freebsd/master
-hardened/current/master:freebsd/master
+freebsd/10.2-releng/master:freebsd/releng/10.2
+hardened/10.2-releng/master:freebsd/10.2-releng/master
+freebsd/current/master:freebsd/master
+hardened/current/master:freebsd/current/master
 hardened/current/aslr:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
 hardened/current/segvguard-ng:origin/hardened/current/master
