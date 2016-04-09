@@ -4,13 +4,18 @@ set _date = `date "+%Y%m%d"`
 set _Mtag = ""
 set _mtag = ""
 set _stag = ""
+set remotes = "origin"
 
-if ($#argv < 2 ) then
-	echo "$0 (10-stable|current) (-M|-m|-s)"
-	echo "	-M	update major version"
-	echo "	-m	update minor version"
+if ($#argv < 1 ) then
+	echo "$0 (10-stable|current) (-s)"
 	echo "	-s	update snapshot version"
 	exit 1
+endif
+
+if ($#argv == 2 ) then
+	set __update_mode = ${argv[2]}
+else
+	set __update_mode = default
 endif
 
 git remote -v
@@ -36,7 +41,6 @@ git fetch hardenedbsd
 echo
 
 set __branch = ${argv[1]}
-set __update_mode = ${argv[2]}
 
 switch (${__branch})
 case "10-stable":
@@ -72,42 +76,28 @@ set _last_mtag = ${_last_mtag[$#_last_mtag]}
 set _last_stag = `git tag -l "${_stag_template}*" | sort --version-sort`
 set _last_stag = ${_last_stag[$#_last_stag]}
 
-reswitch:
-
 switch (${__update_mode})
 case	-s:
 	set _mode = "snapshot"
 	# always create snapshot tags
 	# so just break out
 	breaksw
-case	-M:
-	set _mode = "major"
-
-	set _last_major = `echo ${_last_Mtag} | cut -d 'v' -f 2`
-	@ _new_major = ${_last_major} + 1
-	if ( ${_new_major} < ${_source_version} ) then
-		set _new_major = ${_source_version}
-	endif
-
-	set _Mtag = ${_vtag_template}${_new_major}
-	breaksw
-case	-m:
-	set _mode = "minor"
-
+default:
 	set _last_major = `echo ${_last_Mtag} | cut -d 'v' -f 2`
 	if ( ${_last_major} < ${_source_version} ) then
-		echo "WARNING: local major version (${_last_major}) differs from remote major version (${_source_version}), change to major update"
+		echo "WARNING: local major version (${_last_major}) differs from remote major version (${_source_version}), are you sure to release new major version?"
 		echo "--"
 		echo 'enter "yes" to continue'
 		set _ok = $<
 		if ( $_ok != "yes" ) then
 			exit 1
 		endif
-
-		set __update_mode = "-M"
-		goto reswitch
+		set _Mtag = ${_vtag_template}${_source_version}
+		set _mode = "major"
+		breaksw
 	endif
 
+	set _mode = "minor"
 	if ( ${_last_Mtag} == ${_last_mtag} ) then
 		set _mtag = "${_last_Mtag}.1"
 	else
@@ -115,10 +105,6 @@ case	-m:
 		@ _new_minor = ${_last_minor} + 1
 		set _mtag = "${_last_Mtag}.${_new_minor}"
 	endif
-	breaksw
-default:
-	echo "not supported mode"
-	exit 1
 	breaksw
 endsw
 
@@ -158,14 +144,17 @@ endif
 
 if ( "X${_Mtag}" != "X" ) then
 	git tag ${_Mtag}
+	git shortlog ${_last_mtag}..${_Mtag} > /tmp/shortlog.txt
 endif
 
 if ( "X${_mtag}" != "X" ) then
 	git tag ${_mtag}
+	git shortlog ${_last_mtag}..${_mtag} > /tmp/shortlog.txt
 endif
 
 if ( "X${_stag}" != "X" ) then
 	git tag ${_stag}
+	git shortlog ${_last_mtag}..${_stag} > /tmp/shortlog.txt
 endif
 echo "--"
 echo 'enter "yes" to continue and push the tags'
@@ -174,8 +163,10 @@ if ( $_ok != "yes" ) then
 	exit 1
 endif
 
-git push
-git push --tags
+foreach i ( ${remotes} )
+	git push ${i}
+	git push --tags ${i}
+end
 
 echo
 echo "done."
