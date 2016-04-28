@@ -109,7 +109,12 @@ default:
 endsw
 
 set _stag = "${_stag_template}${_date}-1"
-# XXX check and handle stag collision here
+if ( ${_stag} == ${_last_stag} ) then
+	set _last_snapshot = `echo ${_last_stag} | sed -e 's/.*-\(.*\)$/\1/g'`
+	@ _new_snapshot = ${_last_snapshot} + 1
+	set _stag = "${_stag_template}${_date}-${_new_snapshot}"
+endif
+
 
 echo "remote branch:	${_rbranch}"
 echo "local branch:	${_lbranch}"
