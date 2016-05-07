@@ -18,9 +18,12 @@ git branch --track freebsd/10.3-releng/master freebsd/releng/10.3
 
 # HardenedBSD master branch
 git branch --track {,origin/}hardened/current/master
+git branch --track {,origin/}hardened/current/master-libressl
+git branch --track {,origin/}hardened/current/unstable
 
 # HardenedBSD 10-STABLE topic branches
 git branch --track {,origin/}hardened/10-stable/master
+git branch --track {,origin/}hardened/10-stable/master-libressl
 git branch --track {,origin/}hardened/10-stable/unstable
 
 # HardenedBSD 10.2-RELENG topic branches
@@ -29,5 +32,4 @@ git branch --track {,origin/}hardened/10.2-releng/master
 # HardenedBSD CURRENT topic branches
 git branch --track {,origin/}hardened/current/intel-smap
 git branch --track {,origin/}hardened/current/segvguard-ng
-git branch --track {,origin/}hardened/current/unstable
 git branch --track {,origin/}hardened/current/log
