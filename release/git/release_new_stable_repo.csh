@@ -89,7 +89,7 @@ default:
 		echo "--"
 		echo 'enter "yes" to continue'
 		set _ok = $<
-		if ( $_ok != "yes" ) then
+		if ( ${_ok} != "yes" ) then
 			exit 1
 		endif
 		set _Mtag = ${_vtag_template}${_source_version}
@@ -125,7 +125,7 @@ echo "prev stag:	${_last_stag}	new stag:	${_stag}"
 echo "--"
 echo 'enter "yes" to continue and check the changes'
 set _ok = $<
-if ( $_ok != "yes" ) then
+if ( ${_ok} != "yes" ) then
 	exit 1
 endif
 
@@ -135,7 +135,7 @@ git diff ${_lbranch} ${_rbranch}
 echo "--"
 echo 'enter "yes" to continue merge the changes'
 set _ok = $<
-if ( $_ok != "yes" ) then
+if ( ${_ok} != "yes" ) then
 	exit 1
 endif
 
@@ -143,28 +143,28 @@ git merge ${_rbranch}
 echo "--"
 echo 'enter "yes" to continue and create the tags'
 set _ok = $<
-if ( $_ok != "yes" ) then
+if ( ${_ok} != "yes" ) then
 	exit 1
 endif
 
 if ( "X${_Mtag}" != "X" ) then
 	git tag ${_Mtag}
-	git shortlog ${_last_mtag}..${_Mtag} > /tmp/shortlog.txt
+	git shortlog ${_last_mtag}..${_Mtag} > /tmp/shortlog-${_Mtag}.txt
 endif
 
 if ( "X${_mtag}" != "X" ) then
 	git tag ${_mtag}
-	git shortlog ${_last_mtag}..${_mtag} > /tmp/shortlog.txt
+	git shortlog ${_last_mtag}..${_mtag} > /tmp/shortlog-${_mtag}.txt
 endif
 
 if ( "X${_stag}" != "X" ) then
 	git tag ${_stag}
-	git shortlog ${_last_mtag}..${_stag} > /tmp/shortlog.txt
+	git shortlog ${_last_mtag}..${_stag} > /tmp/shortlog-${_stag}.txt
 endif
 echo "--"
 echo 'enter "yes" to continue and push the tags'
 set _ok = $<
-if ( $_ok != "yes" ) then
+if ( ${_ok} != "yes" ) then
 	exit 1
 endif
 
