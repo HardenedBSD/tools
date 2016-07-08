@@ -27,11 +27,12 @@ git branch --track {,origin/}hardened/10-stable/unstable
 # HardenedBSD 10.2-RELENG master branches
 git branch --track {,origin/}hardened/10.2-releng/master
 
-# HardenedBSD 10-STABLE master branches
+# HardenedBSD 11-STABLE master branches
 git branch --track {,origin/}hardened/11-stable/master
 git branch --track {,origin/}hardened/11-stable/master-libressl
 
 # HardenedBSD 11-STABLE topic branches
+git branch --track {,origin/}hardened/11-stable/unstable
 
 # HardenedBSD master branch
 git branch --track {,origin/}hardened/current/master
