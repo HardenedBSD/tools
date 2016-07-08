@@ -7,7 +7,7 @@ set _stag = ""
 set remotes = "origin"
 
 if ($#argv < 1 ) then
-	echo "$0 (10-stable|current) (-s)"
+	echo "$0 (10-stable|11-stable|current) (-s)"
 	echo "	-s	update snapshot version"
 	exit 1
 endif
@@ -49,11 +49,17 @@ case "10-stable":
 		set _stag_template = "hardenedbsd-10-stable-"
 		set _vtag_template = "HardenedBSD-10-STABLE-v"
 	breaksw
+case "11-stable":
+		set _lbranch = "hardened/11-stable/master"
+		set _rbranch = "hardenedbsd/hardened/11-stable/master"
+		set _stag_template = "hardenedbsd-11-stable-"
+		set _vtag_template = "HardenedBSD-11-STABLE-v"
+	breaksw
 case "current":
 		set _lbranch = "hardened/current/master"
 		set _rbranch = "hardenedbsd/hardened/current/master"
 		set _stag_template = "hardenedbsd-master-"
-		set _vtag_template = "HardenedBSD-11-CURRENT-v"
+		set _vtag_template = "HardenedBSD-12-CURRENT-v"
 	breaksw
 default:
 	echo "not supported branch"
