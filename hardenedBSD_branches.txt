@@ -7,6 +7,8 @@ freebsd/10.2-releng/master:freebsd/releng/10.2
 hardened/10.2-releng/master:freebsd/10.2-releng/master
 freebsd/10.3-releng/master:freebsd/releng/10.3
 hardened/10.3-releng/master:freebsd/10.3-releng/master
+freebsd/11.0-releng/master:freebsd/releng/11.0
+hardened/11.0-releng/master:freebsd/11.0-releng/master
 freebsd/11-stable/master:freebsd/stable/11
 hardened/11-stable/master:freebsd/11-stable/master
 hardened/11-stable/master-libressl:origin/hardened/11-stable/master
@@ -15,6 +17,7 @@ freebsd/current/master:freebsd/master
 hardened/current/master:freebsd/current/master
 hardened/current/master-libressl:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
+hardened/current/drm-next:origin/hardened/current/master
 hardened/current/segvguard-ng:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/segvguard-ng
