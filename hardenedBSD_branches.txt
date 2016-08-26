@@ -17,7 +17,6 @@ freebsd/current/master:freebsd/master
 hardened/current/master:freebsd/current/master
 hardened/current/master-libressl:origin/hardened/current/master
 hardened/current/log:origin/hardened/current/master
-hardened/current/drm-next:origin/hardened/current/master
 hardened/current/segvguard-ng:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/master
 hardened/current/unstable:origin/hardened/current/segvguard-ng
