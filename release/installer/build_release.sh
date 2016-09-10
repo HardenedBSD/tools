@@ -4,10 +4,7 @@
 # TODO
 # ----
 # proper logging
-# force mode
 # error recovery
-# signing
-# do not hardcode amd64/amd64 in WWW_* path, make them configurable
 #
 
 PATH=${PATH}:/usr/local/bin
@@ -161,7 +158,7 @@ parse_release_metainfo()
 		esac
 	done
 
-	info "received metainfo: "
+	info "build(${_branch}) received metainfo: "
 	info "	`get_branch_specific ${_branch} CHROOT`"
 	info "	`get_branch_specific ${_branch} HBSD_BRANCH`"
 	info "	`get_branch_specific ${_branch} HBSD_NAME_TAG`"
@@ -281,8 +278,17 @@ publish_release()
 		then
 			find ${_www_iso_dir} -name "CHECKSUM.*" -type f -exec ${SIGN_COMMAND} {} \;
 			find ${_www_dist_dir} -name "MANIFEST" -type f -exec ${SIGN_COMMAND} {} \;
-
 		fi
+
+		# log out the newly generated ISOs checksums
+		for i in `find ${_www_iso_dir} -name "CHECKSUM.*" -type f`
+		do
+			info "build(${_branch}) `basename ${i}`:"
+			cat $i | while read line
+			do
+				info "  ${line}"
+			done
+		done
 
 		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	else
