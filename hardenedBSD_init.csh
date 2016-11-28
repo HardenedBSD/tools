@@ -43,7 +43,6 @@ git branch --track {,origin/}hardened/11-stable/unstable
 
 # HardenedBSD master branch
 git branch --track {,origin/}hardened/current/master
-git branch --track {,origin/}hardened/current/master-libressl
 git branch --track {,origin/}hardened/current/unstable
 
 # HardenedBSD CURRENT topic branches
