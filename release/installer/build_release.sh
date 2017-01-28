@@ -35,8 +35,8 @@ RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/HardenedBSD-stable-
 SIGN_COMMAND="/root/bin/hbsd_sign.csh"
 
 WWW_BASE="/usr/data/release/releases"
-WWW_RELEASE_DIR="${WWW_BASE}/pub/HardenedBSD/releases/amd64/amd64"
-WWW_ISO_DIR="${WWW_BASE}/pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES"
+WWW_RELEASE_DIR="./pub/HardenedBSD/releases/amd64/amd64"
+WWW_ISO_DIR="./pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES"
 
 log()
 {
@@ -247,7 +247,16 @@ publish_release()
 
 	if [ ${_status} = 0 ]
 	then
-		for i in ${WWW_BASE} ${WWW_ISO_DIR} ${WWW_RELEASE_DIR}
+		set old_pwd=${PWD}
+
+		if [ ! -d ${WWW_BASE} ]
+		then
+			mkdir -p ${WWW_BASE}
+		fi
+
+		cd ${WWW_BASE}
+
+		for i in ${WWW_ISO_DIR} ${WWW_RELEASE_DIR}
 		do
 			if [ ! -d ${i} ]
 			then
@@ -290,7 +299,9 @@ publish_release()
 			done
 		done
 
-		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
+		cd ${old_pwd}
+
+		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -c core@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	else
 		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -c core@hardenedbsd.org -s "[FAILED] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	fi
