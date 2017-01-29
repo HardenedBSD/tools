@@ -266,30 +266,37 @@ publish_release()
 
 		# XXX: first we should move the ftp directory
 		# because after the move only the iso files are left.
+		#
+		# The symlink points to the _hbsd_name_tag named directory in _www_dist_dir.
 		mv -v ${_R_dir}/ftp ${_www_dist_dir}
-		ln -vsf ${_www_dist_dir} ${_www_dist_dir_symlink}
+		ln -vsf ./${_hbsd_name_tag} ${_www_dist_dir_symlink}
 
-		# XXX: in theory only the iso, img, and checksum file are
-		# in the R directory
+		# XXX: in theory only the iso, img, and checksum file are in the R directory.
+		#
+		# The symlink points to the _hbsd_name_tag named directory in _www_iso_dir.
 		mv -v ${_R_dir} ${_www_iso_dir}
-		ln -vsf ${_www_iso_dir} ${_www_iso_dir_symlink}
+		ln -vsf ./${_hbsd_name_tag} ${_www_iso_dir_symlink}
 
-		# this is required by bootonly medium
+		# This is required by bootonly medium.
+		#
+		# The symlink points to the _hbsd_name_tag named directory in _www_iso_dir.
 		unlink ${_www_dist_dir_last_symlink}
-		ln -vsf ${_www_dist_dir} ${_www_dist_dir_last_symlink}
+		ln -vsf ./${_hbsd_name_tag} ${_www_dist_dir_last_symlink}
 
-		# this is for installer.hardenedbsd.org's main page's last links
+		# This is for installer.hardenedbsd.org's main page's last links.
+		#
+		# The symlink points to the last _www_iso_dir directory in _www_iso_dir.
 		unlink ${WWW_BASE}/${_last_build_from_branch}
 		ln -vsf ${_www_iso_dir} ${WWW_BASE}/${_last_build_from_branch}
 
-		# sign the MANIFEST file and the CHECKSUM.*
+		# Sign the MANIFEST file and the CHECKSUM.*
 		if [ -e ${SIGN_COMMAND} ]
 		then
 			find ${_www_iso_dir} -name "CHECKSUM.*" -type f -exec ${SIGN_COMMAND} {} \;
 			find ${_www_dist_dir} -name "MANIFEST" -type f -exec ${SIGN_COMMAND} {} \;
 		fi
 
-		# log out the newly generated ISOs checksums
+		# Log out the newly generated ISOs checksums.
 		for i in `find ${_www_iso_dir} -name "CHECKSUM.*" -type f`
 		do
 			info "build(${_branch}) `basename ${i}`:"
