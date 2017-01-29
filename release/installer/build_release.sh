@@ -279,13 +279,13 @@ publish_release()
 
 		# This is required by bootonly medium.
 		#
-		# The symlink points to the _hbsd_name_tag named directory in _www_iso_dir.
+		# The symlink points to the _hbsd_name_tag named directory in _www_dist_dir.
 		unlink ${_www_dist_dir_last_symlink}
 		ln -vsf ./${_hbsd_name_tag} ${_www_dist_dir_last_symlink}
 
 		# This is for installer.hardenedbsd.org's main page's last links.
 		#
-		# The symlink points to the last _www_iso_dir directory in _www_iso_dir.
+		# The symlink points to the last _www_iso_dir directory in WWW_BASE.
 		unlink ${WWW_BASE}/${_last_build_from_branch}
 		ln -vsf ${_www_iso_dir} ${WWW_BASE}/${_last_build_from_branch}
 
