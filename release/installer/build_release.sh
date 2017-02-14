@@ -40,7 +40,7 @@ SIGN_COMMAND="/root/bin/hbsd_sign.csh"
 INSTALLER_SETS_BASE="${RELESE_BASE_DIR}/releases"
 INSTALLER_SETS_RELEASE_DIR="./pub/HardenedBSD/releases/amd64/amd64"
 INSTALLER_SETS_ISO_DIR="./pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES"
-WWW_HOOK_DIRS="${RELESE_BASE_DIR}/www/"
+WWW_HOOKS_DIR="${RELESE_BASE_DIR}/www/"
 
 log()
 {
@@ -306,11 +306,14 @@ publish_release()
 
 		cd ${old_pwd}
 
-		# This is for installer.hardenedbsd.org's main page's last links.
-		#
-		# The symlink points to the last _installer_sets_iso_dir directory in WWW_HOOK_DIRS.
-		unlink ${WWW_HOOK_DIRS}/${_last_build_from_branch}
-		ln -vsf ${INSTALLER_SETS_BASE}/${_installer_sets_iso_dir} ${WWW_HOOK_DIRS}/${_last_build_from_branch}
+		if [ -d ${WWW_HOOKS_DIR} ]
+		then
+			# This is for installer.hardenedbsd.org's main page's last links.
+			#
+			# The symlink points to the last _installer_sets_iso_dir directory in WWW_HOOKS_DIR.
+			unlink ${WWW_HOOKS_DIR}/${_last_build_from_branch}
+			ln -vsf ${INSTALLER_SETS_BASE}/${_installer_sets_iso_dir} ${WWW_HOOKS_DIR}/${_last_build_from_branch}
+		fi
 
 		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -c core@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	else
