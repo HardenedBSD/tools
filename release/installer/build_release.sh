@@ -287,12 +287,6 @@ publish_release()
 		unlink ${_installer_sets_dist_dir_last_symlink}
 		ln -vsf ./${_hbsd_name_tag} ${_installer_sets_dist_dir_last_symlink}
 
-		# This is for installer.hardenedbsd.org's main page's last links.
-		#
-		# The symlink points to the last _installer_sets_iso_dir directory in INSTALLER_SETS_BASE.
-		unlink ${WWW_HOOK_DIRS}/${_last_build_from_branch}
-		ln -vsf ${_installer_sets_iso_dir} ${WWW_HOOK_DIRS}/${_last_build_from_branch}
-
 		# Sign the MANIFEST file and the CHECKSUM.*
 		if [ -e ${SIGN_COMMAND} ]
 		then
@@ -311,6 +305,12 @@ publish_release()
 		done
 
 		cd ${old_pwd}
+
+		# This is for installer.hardenedbsd.org's main page's last links.
+		#
+		# The symlink points to the last _installer_sets_iso_dir directory in WWW_HOOK_DIRS.
+		unlink ${WWW_HOOK_DIRS}/${_last_build_from_branch}
+		ln -vsf ${INSTALLER_SETS_BASE}/${_installer_sets_iso_dir} ${WWW_HOOK_DIRS}/${_last_build_from_branch}
 
 		cat ${LOG_FILE_SHORT} | mail -c op@hardenedbsd.org -c core@hardenedbsd.org -s "[DONE] HardenedBSD-stable ${_branch} ${_hbsd_date_tag} ${_hbsd_name_tag} RELEASE builds @${DATE}" robot@hardenedbsd.org
 	else
