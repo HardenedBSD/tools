@@ -16,14 +16,17 @@ BRANCH_10="hardened/10-stable/master"
 BRANCH_11="hardened/11-stable/master"
 BRANCH_current="hardened/current/master"
 
-LOG_DIR="/usr/data/release/logs"
+RELESE_BASE_DIR="/usr/data/release"
+
+LOG_DIR="${RELESE_BASE_DIR}/logs"
 LOG_DIR_INFO="${LOG_DIR}/info"
 LOG_DIR_DONE="${LOG_DIR}/done"
 LOG_DIR_FAILED="${LOG_DIR}/failed"
 LOG_FILE_PREFIX="${LOG_DIR}/${DATE}"
 LOG_FILE="${LOG_FILE_PREFIX}.log"
 LOG_FILE_SHORT="${LOG_DIR}/${DATE}.slog"
-SOURCES_DIR="/usr/data/release/git"
+
+SOURCES_DIR="${RELESE_BASE_DIR}/git"
 LOCK_DIR="${SOURCES_DIR}"
 LOCK_FILE="${LOCK_DIR}/hardenedbsd-stable-repo-lock"
 SOURCES_REPO="https://github.com/HardenedBSD"
@@ -34,9 +37,10 @@ HARDENEDBSD_TOOLS_REPO="${SOURCES_REPO}/tools.git"
 RELEASE_CONF="${SOURCES_DIR}/tools.git/release/release-confs/HardenedBSD-stable-autodetect-git-release.conf"
 SIGN_COMMAND="/root/bin/hbsd_sign.csh"
 
-WWW_BASE="/usr/data/release/releases"
-WWW_RELEASE_DIR="./pub/HardenedBSD/releases/amd64/amd64"
-WWW_ISO_DIR="./pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES"
+INSTALLER_SETS_BASE="${RELESE_BASE_DIR}/releases"
+INSTALLER_SETS_RELEASE_DIR="./pub/HardenedBSD/releases/amd64/amd64"
+INSTALLER_SETS_ISO_DIR="./pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES"
+WWW_HOOK_DIRS="${RELESE_BASE_DIR}/www/"
 
 log()
 {
@@ -238,25 +242,25 @@ publish_release()
 	local _last_build_from_branch="`transform_branch_to_filename ${_branch}`-LAST"
 	local _hbsd_name_tag="`get_branch_specific ${_branch} HBSD_NAME_TAG`"
 	local _hbsd_date_tag="`get_branch_specific ${_branch} HBSD_DATE_TAG`"
-	local _www_iso_dir="${WWW_ISO_DIR}/${_hbsd_name_tag}"
-	local _www_iso_dir_symlink="${WWW_ISO_DIR}/${_hbsd_date_tag}"
-	local _www_dist_dir="${WWW_RELEASE_DIR}/${_hbsd_name_tag}"
-	local _www_dist_dir_symlink="${WWW_RELEASE_DIR}/${_hbsd_date_tag}"
-	local _www_dist_dir_last_symlink="${WWW_RELEASE_DIR}/${_hbsd_date_tag%-*-*}-LAST"
+	local _installer_sets_iso_dir="${INSTALLER_SETS_ISO_DIR}/${_hbsd_name_tag}"
+	local _installer_sets_iso_dir_symlink="${INSTALLER_SETS_ISO_DIR}/${_hbsd_date_tag}"
+	local _installer_sets_dist_dir="${INSTALLER_SETS_RELEASE_DIR}/${_hbsd_name_tag}"
+	local _installer_sets_dist_dir_symlink="${INSTALLER_SETS_RELEASE_DIR}/${_hbsd_date_tag}"
+	local _installer_sets_dist_dir_last_symlink="${INSTALLER_SETS_RELEASE_DIR}/${_hbsd_date_tag%-*-*}-LAST"
 	local _R_dir="`get_branch_specific ${_branch} RELEASE_DIR`"
 
 	if [ ${_status} = 0 ]
 	then
 		set old_pwd=${PWD}
 
-		if [ ! -d ${WWW_BASE} ]
+		if [ ! -d ${INSTALLER_SETS_BASE} ]
 		then
-			mkdir -p ${WWW_BASE}
+			mkdir -p ${INSTALLER_SETS_BASE}
 		fi
 
-		cd ${WWW_BASE}
+		cd ${INSTALLER_SETS_BASE}
 
-		for i in ${WWW_ISO_DIR} ${WWW_RELEASE_DIR}
+		for i in ${INSTALLER_SETS_ISO_DIR} ${INSTALLER_SETS_RELEASE_DIR}
 		do
 			if [ ! -d ${i} ]
 			then
@@ -267,37 +271,37 @@ publish_release()
 		# XXX: first we should move the ftp directory
 		# because after the move only the iso files are left.
 		#
-		# The symlink points to the _hbsd_name_tag named directory in _www_dist_dir.
-		mv -v ${_R_dir}/ftp ${_www_dist_dir}
-		ln -vsf ./${_hbsd_name_tag} ${_www_dist_dir_symlink}
+		# The symlink points to the _hbsd_name_tag named directory in _installer_sets_dist_dir.
+		mv -v ${_R_dir}/ftp ${_installer_sets_dist_dir}
+		ln -vsf ./${_hbsd_name_tag} ${_installer_sets_dist_dir_symlink}
 
 		# XXX: in theory only the iso, img, and checksum file are in the R directory.
 		#
-		# The symlink points to the _hbsd_name_tag named directory in _www_iso_dir.
-		mv -v ${_R_dir} ${_www_iso_dir}
-		ln -vsf ./${_hbsd_name_tag} ${_www_iso_dir_symlink}
+		# The symlink points to the _hbsd_name_tag named directory in _installer_sets_iso_dir.
+		mv -v ${_R_dir} ${_installer_sets_iso_dir}
+		ln -vsf ./${_hbsd_name_tag} ${_installer_sets_iso_dir_symlink}
 
 		# This is required by bootonly medium.
 		#
-		# The symlink points to the _hbsd_name_tag named directory in _www_dist_dir.
-		unlink ${_www_dist_dir_last_symlink}
-		ln -vsf ./${_hbsd_name_tag} ${_www_dist_dir_last_symlink}
+		# The symlink points to the _hbsd_name_tag named directory in _installer_sets_dist_dir.
+		unlink ${_installer_sets_dist_dir_last_symlink}
+		ln -vsf ./${_hbsd_name_tag} ${_installer_sets_dist_dir_last_symlink}
 
 		# This is for installer.hardenedbsd.org's main page's last links.
 		#
-		# The symlink points to the last _www_iso_dir directory in WWW_BASE.
-		unlink ${WWW_BASE}/${_last_build_from_branch}
-		ln -vsf ${_www_iso_dir} ${WWW_BASE}/${_last_build_from_branch}
+		# The symlink points to the last _installer_sets_iso_dir directory in INSTALLER_SETS_BASE.
+		unlink ${WWW_HOOK_DIRS}/${_last_build_from_branch}
+		ln -vsf ${_installer_sets_iso_dir} ${WWW_HOOK_DIRS}/${_last_build_from_branch}
 
 		# Sign the MANIFEST file and the CHECKSUM.*
 		if [ -e ${SIGN_COMMAND} ]
 		then
-			find ${_www_iso_dir} -name "CHECKSUM.*" -type f -exec ${SIGN_COMMAND} {} \;
-			find ${_www_dist_dir} -name "MANIFEST" -type f -exec ${SIGN_COMMAND} {} \;
+			find ${_installer_sets_iso_dir} -name "CHECKSUM.*" -type f -exec ${SIGN_COMMAND} {} \;
+			find ${_installer_sets_dist_dir} -name "MANIFEST" -type f -exec ${SIGN_COMMAND} {} \;
 		fi
 
 		# Log out the newly generated ISOs checksums.
-		for i in `find ${_www_iso_dir} -name "CHECKSUM.*" -type f`
+		for i in `find ${_installer_sets_iso_dir} -name "CHECKSUM.*" -type f`
 		do
 			info "build(${_branch}) `basename ${i}`:"
 			cat $i | while read line
