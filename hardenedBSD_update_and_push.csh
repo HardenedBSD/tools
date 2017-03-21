@@ -31,6 +31,9 @@ git stash
 
 (git fetch origin) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
 (git fetch freebsd) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
+# pushing the freshly fetched FreeBSD commit notes to hardenedbsd repo
+# these contains the svn revision ids
+(git push origin refs/notes/commits) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
 
 foreach branch ( ${BRANCHES} )
 	set err=0

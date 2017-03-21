@@ -8,6 +8,7 @@ endif
 cd hardenedBSD.git
 
 git remote add freebsd https://github.com/freebsd/freebsd.git
+git config --add remote.freebsd.fetch '+refs/notes/*:refs/notes/*'
 git fetch freebsd
 
 # FreeBSD upstream repos
