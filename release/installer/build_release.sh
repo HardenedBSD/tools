@@ -42,6 +42,10 @@ INSTALLER_SETS_RELEASE_DIR="./pub/HardenedBSD/releases/amd64/amd64"
 INSTALLER_SETS_ISO_DIR="./pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES"
 WWW_HOOKS_DIR="${RELESE_BASE_DIR}/www/"
 
+# set reply-to to robot in mail command
+REPLYTO="robot@hardenedbsd.org"
+export REPLYTO
+
 log()
 {
 	echo "`date` $*" | tee -a ${LOG_FILE_SHORT}

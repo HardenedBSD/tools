@@ -1,5 +1,8 @@
 #!/bin/csh
 
+# set reply-to to robot in mail command
+setenv REPLYTO "robot@hardenedbsd.org"
+
 set OPWD=`pwd`
 set SOURCE_DIR="/usr/data/source/git/opBSD"
 set BRANCHES=`cat $SOURCE_DIR/hardenedBSD_branches.txt`
