@@ -100,7 +100,7 @@ default:
 		endif
 		set _Mtag = ${_vtag_template}${_source_version}
 		set _mode = "major"
-		set _tag = ${Mtag}
+		set _tag = ${_Mtag}
 		breaksw
 	endif
 
