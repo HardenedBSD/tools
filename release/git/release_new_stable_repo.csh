@@ -72,7 +72,7 @@ git pull
 
 echo
 
-set _source_version = `git show ${_rbranch}:sys/sys/pax.h | awk '/__HardenedBSD_version/{print $3}' | sed -e 's/UL$//g'`
+set _source_version = `git show ${_rbranch}:sys/sys/pax.h | awk '/#define[[:space:]]__HardenedBSD_version/{print $3}' | sed -e 's/UL$//g'`
 
 # find the previous versions
 set _last_Mtag = `git tag -l "${_vtag_template}*" | sort --version-sort | grep -v '\.'`
