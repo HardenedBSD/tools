@@ -38,13 +38,20 @@ git stash
 # these contains the svn revision ids
 (git push origin refs/notes/commits) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
 
-foreach branch ( ${BRANCHES} )
+foreach line ( ${BRANCHES} )
 	set err=0
 	set _mail_subject_prefix=""
 
-	set remote_branches=`echo ${branch} | cut -d ':' -f 2 | tr '+' ' '`
-	set branch=`echo ${branch} | cut -d ':' -f 1`
+	set remote_branches=`echo ${line} | cut -d ':' -f 2 | tr '+' ' '`
+	set branch=`echo ${line} | cut -d ':' -f 1 | tr -d '#'`
 	set _branch=`echo ${branch} | tr '/' ':'`
+
+	# Skip lines beginning with '#'
+	echo ${line} | grep -Eq '^#.*'
+	if ( $? == 0 ) then
+		echo "=== SKIP: ${line} ===" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		goto handle_err
+	endif
 
 	echo "==== BEGIN: ${branch} ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 
