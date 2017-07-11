@@ -46,17 +46,18 @@ foreach line ( ${BRANCHES} )
 	set branch=`echo ${line} | cut -d ':' -f 1 | tr -d '#'`
 	set _branch=`echo ${branch} | tr '/' ':'`
 
-	# Skip lines beginning with '#'
-	echo ${line} | grep -Eq '^#.*'
-	if ( $? == 0 ) then
-		echo "=== SKIP: ${line} ===" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
-		goto handle_err
-	endif
-
 	echo "==== BEGIN: ${branch} ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 
 	echo "current branch: ${branch}" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	echo "mergeable branch: ${remote_branches}" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+
+	# Skip lines beginning with '#'
+	echo ${line} | grep -Eq '^#.*'
+	if ( $? == 0 ) then
+		set _mail_subject_prefix="[SKIP]"
+		echo "==== SKIP: ${line} ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		goto handle_err
+	endif
 
 	echo "==== change branch ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	# change branch
