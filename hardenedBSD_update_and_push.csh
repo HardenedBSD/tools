@@ -82,7 +82,7 @@ foreach line ( ${BRANCHES} )
 	foreach _remote_branch ( ${remote_branches} )
 		# merge specific branches to current branch
 		echo "==== merge ${_remote_branch} branch ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
-		(git merge ${branch} ${_remote_branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		(git merge --log ${branch} ${_remote_branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 		if ( $? != 0 ) then
 			set err=1
 			set _mail_subject_prefix="[MERGE]"
