@@ -4,8 +4,6 @@ hardened/10-stable/master-libressl:origin/hardened/10-stable/master
 hardened/10-stable/unstable:origin/hardened/10-stable/master
 freebsd/10.3-releng/master:freebsd/releng/10.3
 hardened/10.3-releng/master:freebsd/10.3-releng/master
-freebsd/11.0-releng/master:freebsd/releng/11.0
-hardened/11.0-releng/master:freebsd/11.0-releng/master
 freebsd/11.1-releng/master:freebsd/releng/11.1
 hardened/11.1-releng/master:freebsd/11.1-releng/master
 freebsd/11-stable/master:freebsd/stable/11
