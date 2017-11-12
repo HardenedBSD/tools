@@ -67,9 +67,15 @@ foreach line ( ${BRANCHES} )
 	# show, that branch correctly switched
 	(git branch) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 
-	echo "==== drop stale changes ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
-	# drop any stale change
-	(git reset --hard HEAD) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	echo "==== check for stale changes ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	set changed_files=`git status --porcelain -uall | wc -c`
+
+	if ( ${changed_files} != 0 ) then
+		echo "==== drop stale changes ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		# drop any stale change
+		(git status) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+		(git reset --hard HEAD) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	endif
 
 	echo "==== update to latest origin ====" |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	# pull in latest changes from main repo
