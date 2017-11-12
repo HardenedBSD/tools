@@ -6,6 +6,12 @@ set _mtag = ""
 set _stag = ""
 set remotes = "origin"
 
+if ( -d "/usr/home/op/release" ) then
+	set gen_prefix="/usr/home/op/release"
+else
+	set gen_prefix="${gen_prefix}"
+endif
+
 if ($#argv < 1 ) then
 	echo "$0 (10-stable|11-stable|current) (-s)"
 	echo "	-s	update snapshot version"
@@ -157,12 +163,12 @@ endif
 
 if ( "X${_tag}" != "X" ) then
 	git tag ${_tag}
-	git shortlog ${_last_mtag}..${_tag} > /tmp/shortlog-${_tag}.txt
+	git shortlog ${_last_mtag}..${_tag} > ${gen_prefix}/shortlog-${_tag}.txt
 endif
 
 if ( "X${_stag}" != "X" ) then
 	git tag ${_stag}
-	git shortlog ${_last_mtag}..${_stag} > /tmp/shortlog-${_stag}.txt
+	git shortlog ${_last_mtag}..${_stag} > ${gen_prefix}/shortlog-${_stag}.txt
 endif
 echo "--"
 echo 'enter "yes" to continue and push the tags'
@@ -184,48 +190,44 @@ if ( ${_ok} != "yes" ) then
 endif
 
 echo "post processing changelog"
-echo "${_tag} - https://github.com/HardenedBSD/hardenedBSD-stable/releases/tag/${_tag}"> /tmp/drupal-${_tag}.txt
-echo "<br>" >> /tmp/drupal-${_tag}.txt
-echo "<strong>Highlights:</strong>" >> /tmp/drupal-${_tag}.txt
-echo "<ul>" >> /tmp/drupal-${_tag}.txt
-echo "	<li>...</li>" >> /tmp/drupal-${_tag}.txt
-echo "</ul>" >> /tmp/drupal-${_tag}.txt
-echo "<strong>Installer images:</strong>" >> /tmp/drupal-${_tag}.txt
-echo "http://installer.hardenedbsd.org/pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES/${_tag}/" >> /tmp/drupal-${_tag}.txt
-echo "<br>" >> /tmp/drupal-${_tag}.txt
-echo "<strong>CHECKSUM.SHA512:</strong>" >> /tmp/drupal-${_tag}.txt
-echo "<code>" >> /tmp/drupal-${_tag}.txt
-echo "..." >> /tmp/drupal-${_tag}.txt
-echo "</code>" >> /tmp/drupal-${_tag}.txt
-echo "<br>" >> /tmp/drupal-${_tag}.txt
-echo "<strong>CHECKSUM.SHA512.asc:</strong>" >> /tmp/drupal-${_tag}.txt
-echo "<code>" >> /tmp/drupal-${_tag}.txt
-echo "..." >> /tmp/drupal-${_tag}.txt
-echo "</code>" >> /tmp/drupal-${_tag}.txt
-echo "<br>" >> /tmp/drupal-${_tag}.txt
-echo "<code>" >> /tmp/drupal-${_tag}.txt
-awk 'BEGIN{print "<strong>Changelog:</strong>"; c=0; prev_c=0}; /^[A-Za-z]/{if (c != prev_c) {print "</ul>"; print "<br>"; prev_c = c}; print "<strong>"; print; print "</strong>"; print "<ul>"; c++}; /^[ ]/{print "\t<li>"; print; print "\t</li>"}; END{print "</ul>"}' /tmp/shortlog-${_tag}.txt >> /tmp/drupal-${_tag}.txt
-echo "</code>" >> /tmp/drupal-${_tag}.txt
+echo "${_tag} - https://github.com/HardenedBSD/hardenedBSD-stable/releases/tag/${_tag}"> ${gen_prefix}/drupal-${_tag}.txt
+echo "<br>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<strong>Highlights:</strong>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<ul>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "	<li>...</li>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "</ul>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<strong>Installer images:</strong>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "http://installer.hardenedbsd.org/pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES/${_tag}/" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<br>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<strong>CHECKSUM.SHA512:</strong>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<code>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "</code>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<br>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<strong>CHECKSUM.SHA512.asc:</strong>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<code>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "</code>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<br>" >> ${gen_prefix}/drupal-${_tag}.txt
+echo "<code>" >> ${gen_prefix}/drupal-${_tag}.txt
+awk 'BEGIN{print "<strong>Changelog:</strong>"; c=0; prev_c=0}; /^[A-Za-z]/{if (c != prev_c) {print "</ul>"; print "<br>"; prev_c = c}; print "<strong>"; print; print "</strong>"; print "<ul>"; c++}; /^[ ]/{print "\t<li>"; print; print "\t</li>"}; END{print "</ul>"}' ${gen_prefix}/shortlog-${_tag}.txt >> ${gen_prefix}/drupal-${_tag}.txt
+echo "</code>" >> ${gen_prefix}/drupal-${_tag}.txt
 
-echo "Highlights:" > /tmp/github-${_tag}.txt
-echo " * ..." >> /tmp/github-${_tag}.txt
-echo >> /tmp/github-${_tag}.txt
-echo "Changelog" >> /tmp/github-${_tag}.txt
-echo "~~~" >> /tmp/github-${_tag}.txt
-cat /tmp/shortlog-${_tag}.txt >> /tmp/github-${_tag}.txt
-echo "~~~" >> /tmp/github-${_tag}.txt
-echo >> /tmp/github-${_tag}.txt
-echo "Installer images: http://installer.hardenedbsd.org/pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES/${_tag}/" >> /tmp/github-${_tag}.txt
-echo >> /tmp/github-${_tag}.txt
-echo "CHECKSUM.SHA512:" >> /tmp/github-${_tag}.txt
-echo "~~~" >> /tmp/github-${_tag}.txt
-echo "..." >> /tmp/github-${_tag}.txt
-echo "~~~" >> /tmp/github-${_tag}.txt
-echo >> /tmp/github-${_tag}.txt
-echo "CHECKSUM.SHA512.asc:" >> /tmp/github-${_tag}.txt
-echo "~~~" >> /tmp/github-${_tag}.txt
-echo "..." >> /tmp/github-${_tag}.txt
-echo "~~~" >> /tmp/github-${_tag}.txt
+echo "Highlights:" > ${gen_prefix}/github-${_tag}.txt
+echo " * ..." >> ${gen_prefix}/github-${_tag}.txt
+echo >> ${gen_prefix}/github-${_tag}.txt
+echo "Changelog" >> ${gen_prefix}/github-${_tag}.txt
+echo "~~~" >> ${gen_prefix}/github-${_tag}.txt
+cat ${gen_prefix}/shortlog-${_tag}.txt >> ${gen_prefix}/github-${_tag}.txt
+echo "~~~" >> ${gen_prefix}/github-${_tag}.txt
+echo >> ${gen_prefix}/github-${_tag}.txt
+echo "Installer images: http://installer.hardenedbsd.org/pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES/${_tag}/" >> ${gen_prefix}/github-${_tag}.txt
+echo >> ${gen_prefix}/github-${_tag}.txt
+echo "CHECKSUM.SHA512:" >> ${gen_prefix}/github-${_tag}.txt
+echo "~~~" >> ${gen_prefix}/github-${_tag}.txt
+echo "~~~" >> ${gen_prefix}/github-${_tag}.txt
+echo >> ${gen_prefix}/github-${_tag}.txt
+echo "CHECKSUM.SHA512.asc:" >> ${gen_prefix}/github-${_tag}.txt
+echo "~~~" >> ${gen_prefix}/github-${_tag}.txt
+echo "~~~" >> ${gen_prefix}/github-${_tag}.txt
 echo "post processing changelog done"
 echo
 echo "done."
