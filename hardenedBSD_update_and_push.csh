@@ -36,7 +36,7 @@ git stash
 (git fetch freebsd) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
 # pushing the freshly fetched FreeBSD commit notes to hardenedbsd repo
 # these contains the svn revision ids
-(git push origin refs/notes/commits) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
+(git push --atomic origin refs/notes/commits) |& ${TEE_CMD} ${LOGS}/freebsd-fetch-${DATE}.log
 
 foreach line ( ${BRANCHES} )
 	set err=0
@@ -106,7 +106,7 @@ foreach line ( ${BRANCHES} )
 	endif
 
 	# update remote
-	(git push origin ${branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
+	(git push --atomic origin ${branch}) |& ${TEE_CMD} ${LOGS}/${_branch}-${DATE}.log
 	if ( $? != 0 ) then
 		set _mail_subject_prefix="[PUSH]"
 		set err=1
