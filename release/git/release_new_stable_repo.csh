@@ -9,7 +9,7 @@ set remotes = "origin"
 if ( -d "/usr/home/op/release" ) then
 	set gen_prefix="/usr/home/op/release"
 else
-	set gen_prefix="${gen_prefix}"
+	set gen_prefix="/tmp"
 endif
 
 if ($#argv < 1 ) then
@@ -141,6 +141,13 @@ echo 'enter "yes" to continue and check the changes'
 set _ok = $<
 if ( ${_ok} != "yes" ) then
 	exit 1
+endif
+
+eval echo 'enter \"yes\" to create release directory for generated files under ${gen_prefix}'
+set _ok = $<
+if ( ${_ok} == "yes" ) then
+	set gen_prefix = "${gen_prefix}/${_tag}"
+	mkdir -p ${gen_prefix}
 endif
 
 git log -p ${_lbranch}..${_rbranch}
