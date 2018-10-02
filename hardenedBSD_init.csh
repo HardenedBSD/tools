@@ -18,6 +18,7 @@ git branch --track freebsd/11-stable/master freebsd/stable/11
 git branch --track freebsd/10.3-releng/master freebsd/releng/10.3
 git branch --track freebsd/11.0-releng/master freebsd/releng/11.0
 git branch --track freebsd/11.1-releng/master freebsd/releng/11.1
+git branch --track freebsd/11.2-releng/master freebsd/releng/11.2
 
 # HardenedBSD 10-STABLE master branches
 git branch --track {,origin/}hardened/10-stable/master
@@ -34,6 +35,9 @@ git branch --track {,origin/}hardened/11.0-releng/master
 
 # HardenedBSD 11.1-RELENG master branch
 git branch --track {,origin/}hardened/11.1-releng/master
+
+# HardenedBSD 11.2-RELENG master branch
+git branch --track {,origin/}hardened/11.2-releng/master
 
 # HardenedBSD 11-STABLE master branches
 git branch --track {,origin/}hardened/11-stable/master
