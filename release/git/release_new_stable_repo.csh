@@ -61,11 +61,17 @@ case "11-stable":
 		set _stag_template = "hardenedbsd-11-stable-"
 		set _vtag_template = "HardenedBSD-11-STABLE-v"
 	breaksw
+case "12-stable":
+		set _lbranch = "hardened/12-stable/master"
+		set _rbranch = "hardenedbsd/hardened/12-stable/master"
+		set _stag_template = "hardenedbsd-12-stable-"
+		set _vtag_template = "HardenedBSD-12-STABLE-v"
+	breaksw
 case "current":
 		set _lbranch = "hardened/current/master"
 		set _rbranch = "hardenedbsd/hardened/current/master"
 		set _stag_template = "hardenedbsd-master-"
-		set _vtag_template = "HardenedBSD-12-CURRENT-v"
+		set _vtag_template = "HardenedBSD-13-CURRENT-v"
 	breaksw
 default:
 	echo "not supported branch"
