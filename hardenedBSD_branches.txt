@@ -6,6 +6,8 @@ freebsd/11-stable/master:freebsd/stable/11
 hardened/11-stable/master:freebsd/11-stable/master
 hardened/11-stable/master-libressl:origin/hardened/11-stable/master
 hardened/11-stable/unstable:origin/hardened/11-stable/master
+freebsd/12-stable/master:freebsd/stable/12
+hardened/12-stable/master:freebsd/12-stable/master
 freebsd/current/master:freebsd/master
 hardened/current/master:freebsd/current/master
 hardened/current/unstable:origin/hardened/current/master
