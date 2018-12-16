@@ -13,7 +13,7 @@ else
 endif
 
 if ($#argv < 1 ) then
-	echo "$0 (10-stable|11-stable|current) (-s)"
+	echo "$0 (10-stable|11-stable|12-stable|current) (-s)"
 	echo "	-s	update snapshot version"
 	exit 1
 endif
