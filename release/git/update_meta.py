@@ -54,7 +54,7 @@ def decorate_commit(match):
     return "  <li>" + match.group().lstrip() + "</li>"
 match_empty_line = re.compile("^$")
 def decorate_empty_line(match):
-    return "</ul>"
+    return "</ul>" + '\n' + "<br>"
 for line in f_shortlog:
     formatted_line = line.replace("\n", "")
     github_formatted_lines += [ formatted_line ]
