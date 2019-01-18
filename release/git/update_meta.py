@@ -1,7 +1,10 @@
 #!/usr/bin/env python3.6
 
+# WARNING: this is an experimental PoC script
+
 import os
 import os.path
+import re
 
 cwd = os.path.basename(os.getcwd())
 
@@ -14,7 +17,7 @@ except:
     update_checksum = False
 
 try:
-    with  open("CHECKSUM.SHA512.asc", "r") as f:
+    with open("CHECKSUM.SHA512.asc", "r") as f:
         signature = f.read()
     update_signature = True
 except:
@@ -43,16 +46,28 @@ drupal_notes = "\n".join(drupal_formatted_lines)
 github_formatted_lines = []
 drupal_formatted_lines = []
 f_shortlog = open("shortlog-{version}.txt".format(version=cwd), "r")
+match_committer = re.compile("^\S.*:$")
+def decorate_committer(match):
+    return "<strong>" + match.group() + "</strong>" + '\n' + "<ul>"
+match_commit = re.compile("^\s.*$")
+def decorate_commit(match):
+    return "  <li>" + match.group().lstrip() + "</li>"
+match_empty_line = re.compile("^$")
+def decorate_empty_line(match):
+    return "</ul>"
 for line in f_shortlog:
     formatted_line = line.replace("\n", "")
     github_formatted_lines += [ formatted_line ]
+    formatted_line = match_committer.sub(decorate_committer, formatted_line)
+    formatted_line = match_commit.sub(decorate_commit, formatted_line)
+    formatted_line = match_empty_line.sub(decorate_empty_line, formatted_line)
     drupal_formatted_lines += [ formatted_line ]
 github_shortlog = "\n".join(github_formatted_lines)
 drupal_shortlog = "\n".join(drupal_formatted_lines)
 
 with open("drupal-{version}.txt".format(version=cwd), "w+") as f:
     drupal = drupal_template.replace("%%NOTES%%", drupal_notes)
-    #drupal = drupal.replace("%%SHORTLOG%%", drupal_shortlog)
+    drupal = drupal.replace("%%SHORTLOG%%", drupal_shortlog)
     if update_checksum:
         drupal = drupal.replace("%%CHECKSUM%%", checksum)
     if update_signature:
