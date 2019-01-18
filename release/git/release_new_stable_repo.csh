@@ -223,7 +223,7 @@ echo "%%SIGNATURE%%" >> ${gen_prefix}/drupal-${_tag}.template
 echo "</code>" >> ${gen_prefix}/drupal-${_tag}.template
 echo "<br>" >> ${gen_prefix}/drupal-${_tag}.template
 echo "<code>" >> ${gen_prefix}/drupal-${_tag}.template
-awk 'BEGIN{print "<strong>Changelog:</strong>"; c=0; prev_c=0}; /^[A-Za-z]/{if (c != prev_c) {print "</ul>"; print "<br>"; prev_c = c}; print "<strong>"; print; print "</strong>"; print "<ul>"; c++}; /^[ ]/{print "\t<li>"; print; print "\t</li>"}; END{print "</ul>"}' ${gen_prefix}/shortlog-${_tag}.template >> ${gen_prefix}/drupal-${_tag}.template
+awk 'BEGIN{print "<strong>Changelog:</strong>"; c=0; prev_c=0}; /^[A-Za-z]/{if (c != prev_c) {print "</ul>"; print "<br>"; prev_c = c}; print "<strong>"; print; print "</strong>"; print "<ul>"; c++}; /^[ ]/{print "\t<li>"; print; print "\t</li>"}; END{print "</ul>"}' ${gen_prefix}/shortlog-${_tag}.txt >> ${gen_prefix}/drupal-${_tag}.template
 echo "</code>" >> ${gen_prefix}/drupal-${_tag}.template
 
 echo "Highlights:" > ${gen_prefix}/github-${_tag}.template
@@ -231,7 +231,7 @@ echo "%%NOTES%%" >> ${gen_prefix}/github-${_tag}.template
 echo >> ${gen_prefix}/github-${_tag}.template
 echo "Changelog" >> ${gen_prefix}/github-${_tag}.template
 echo "~~~" >> ${gen_prefix}/github-${_tag}.template
-cat ${gen_prefix}/shortlog-${_tag}.template >> ${gen_prefix}/github-${_tag}.template
+echo "%%SHORTLOG%%" >> ${gen_prefix}/github-${_tag}.template
 echo "~~~" >> ${gen_prefix}/github-${_tag}.template
 echo >> ${gen_prefix}/github-${_tag}.template
 echo "Installer images: http://installer.hardenedbsd.org/pub/HardenedBSD/releases/amd64/amd64/ISO-IMAGES/${_tag}/" >> ${gen_prefix}/github-${_tag}.template

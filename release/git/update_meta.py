@@ -29,22 +29,30 @@ with open("github-{version}.template".format(version=cwd), "r") as f:
 
 github_formatted_lines = []
 drupal_formatted_lines = []
-
 f_notes = open("NOTES", "r")
 for line in f_notes:
     formatted_line = line.replace("\n", "")
     github_formatted_line = [ " * " + formatted_line ]
     github_formatted_lines += github_formatted_line
-
     drupal_formatted_line = [ " <li>" + formatted_line + "</li>" ]
     drupal_formatted_lines += drupal_formatted_line
 f_notes.close()
+github_notes = "\n".join(github_formatted_lines)
+drupal_notes = "\n".join(drupal_formatted_lines)
 
-github_text = "\n".join(github_formatted_lines)
-drupal_text = "\n".join(drupal_formatted_lines)
+github_formatted_lines = []
+drupal_formatted_lines = []
+f_shortlog = open("shortlog-{version}.txt".format(version=cwd), "r")
+for line in f_shortlog:
+    formatted_line = line.replace("\n", "")
+    github_formatted_lines += [ formatted_line ]
+    drupal_formatted_lines += [ formatted_line ]
+github_shortlog = "\n".join(github_formatted_lines)
+drupal_shortlog = "\n".join(drupal_formatted_lines)
 
 with open("drupal-{version}.txt".format(version=cwd), "w+") as f:
-    drupal = drupal_template.replace("%%NOTES%%", drupal_text)
+    drupal = drupal_template.replace("%%NOTES%%", drupal_notes)
+    #drupal = drupal.replace("%%SHORTLOG%%", drupal_shortlog)
     if update_checksum:
         drupal = drupal.replace("%%CHECKSUM%%", checksum)
     if update_signature:
@@ -52,7 +60,8 @@ with open("drupal-{version}.txt".format(version=cwd), "w+") as f:
     f.write(drupal)
 
 with open("github-{version}.txt".format(version=cwd), "w+") as f:
-    github = github_template.replace("%%NOTES%%", github_text)
+    github = github_template.replace("%%NOTES%%", github_notes)
+    github = github.replace("%%SHORTLOG%%", github_shortlog)
     if update_checksum:
         github = github.replace("%%CHECKSUM%%", checksum)
     if update_signature:
