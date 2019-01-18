@@ -149,12 +149,8 @@ if ( ${_ok} != "yes" ) then
 	exit 1
 endif
 
-eval echo 'enter \"yes\" to create release directory for generated files under ${gen_prefix}'
-set _ok = $<
-if ( ${_ok} == "yes" ) then
-	set gen_prefix = "${gen_prefix}/${_tag}"
-	mkdir -p ${gen_prefix}
-endif
+set gen_prefix = "${gen_prefix}/${_tag}"
+mkdir -p ${gen_prefix}
 
 git log -p ${_lbranch}..${_rbranch}
 git diff --stat ${_lbranch} ${_rbranch}
@@ -194,13 +190,6 @@ foreach i ( ${remotes} )
 	git push ${i}
 	git push --tags ${i}
 end
-
-echo "--"
-echo 'enter "yes" to generate html changelog for drupal page'
-set _ok = $<
-if ( ${_ok} != "yes" ) then
-	exit 1
-endif
 
 echo "post processing changelog"
 echo "${_tag} - https://github.com/HardenedBSD/hardenedBSD-stable/releases/tag/${_tag}"> ${gen_prefix}/drupal-${_tag}.template
