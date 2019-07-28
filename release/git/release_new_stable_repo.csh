@@ -41,6 +41,7 @@ if ( ${_ret} != 0 ) then
 			exit 1
 		endif
 	git remote add hardenedbsd git@github.com:HardenedBSD/hardenedBSD.git
+	git config --add remote.hardenedbsd.fetch '+refs/notes/*:refs/notes/*'
 endif
 git fetch hardenedbsd
 
@@ -189,6 +190,7 @@ endif
 foreach i ( ${remotes} )
 	git push ${i}
 	git push --tags ${i}
+	git push --atomic ${i} refs/notes/commits
 end
 
 echo "post processing changelog"
