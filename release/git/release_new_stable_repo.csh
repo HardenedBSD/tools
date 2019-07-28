@@ -188,8 +188,8 @@ if ( ${_ok} != "yes" ) then
 endif
 
 foreach i ( ${remotes} )
-	git push ${i}
-	git push --tags ${i}
+	git push --atomic ${i}
+	git push --atomic --tags ${i}
 	git push --atomic ${i} refs/notes/commits
 end
 
