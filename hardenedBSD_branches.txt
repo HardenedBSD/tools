@@ -1,6 +1,7 @@
 freebsd/12-stable/master:freebsd/stable/12
 hardened/12-stable/master:freebsd/12-stable/master
 freebsd/12.1-releng/master:freebsd/releng/12.1
+hardened/12.1-releng/master:freebsd/releng/12.1
 freebsd/11-stable/master:freebsd/stable/11
 hardened/11-stable/master:freebsd/11-stable/master
 hardened/11-stable/master-libressl:origin/hardened/11-stable/master

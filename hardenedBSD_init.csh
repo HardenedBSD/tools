@@ -56,6 +56,9 @@ git branch --track {,origin/}hardened/12-stable/master
 # HardenedBSD 12.0-RELENG master branch
 git branch --track {,origin/}hardened/12.0-releng/master
 
+# HardenedBSD 12.1-RELENG master branch
+git branch --track {,origin/}hardened/12.1-releng/master
+
 # HardenedBSD master branch
 git branch --track {,origin/}hardened/current/master
 git branch --track {,origin/}hardened/current/unstable
